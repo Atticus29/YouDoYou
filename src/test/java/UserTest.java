@@ -56,6 +56,12 @@ public class UserTest {
    assertEquals(4, User.findUser(testUser.getUserId()).checkIfLevelUp());
  }
 
+ @Test
+ public void find_findsAllUserSkills_true() {
+   Skill testSkill = new Skill("Jumping", testUser.getUserId());
+   testSkill.saveSkillToDatabase();
+   assertEquals(testSkill, User.findUser(testUser.getUserId()).findAllUserSkills().get(0));
+ }
 
 
 }
