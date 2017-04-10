@@ -9,17 +9,79 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.sql.Timestamp;
 
-public class TaskListTest {
+public class TaskListListTest {
+  private TaskList testTaskList;
+
+  @Before
+  public void setUp(){
+    Timestamp newDate = Timestamp.valueOf(LocalDateTime.now().plusDays(10));
+    testTaskList = new TaskList("Laundry", newDate, 1, 1, 1,1,1,1,1);
+    testTaskList.save();
+  }
 
   @Rule
   public DatabaseRule database = new DatabaseRule();
 
 }
 
-// @Test
-// public void update_changesNameBadgeNumberEmail_true(){
-//   testRanger.update("Fran", 100, "mark.fisher3@pcc.edu");
-//   assertEquals("Fran",Ranger.findRanger(testRanger.getId()).getName());
-//   assertEquals(100,Ranger.findRanger(testRanger.getId()).getBadge_number());
-//   assertEquals("mark.fisher3@pcc.edu",Ranger.findRanger(testRanger.getId()).getEmail());
-// }
+@Test
+public void TaskList_instantiatesCorrectly_true(){
+  assertTrue(testTaskList instanceof TaskList);
+}
+
+@Test
+public void markCompleted_marksATaskListTrueForCompleted_true(){
+  assertFalse(testTaskList.getCompleted());
+  testTaskList.markCompleted();
+  assertTrue(testTaskList.getCompleted());
+}
+
+@Test
+public void getters_returnExpectedValues_true(){
+  assertEquals("Laundry", testTaskList.getName());
+  Timestamp expectedDate = Timestamp.valueOf(LocalDateTime.now().plusDays(10));
+  assertEquals(expectedDate.getDate(), testTaskList.getDue().getDate());
+  assertEquals(1, testTaskList.getUser_id());
+  assertEquals(1, testTaskList.getSkill_id());
+  assertEquals(1, testTaskList.getPriority_level());
+  assertFalse(testTaskList.getCompleted());
+  assertEquals(1, testTaskList.getTaskList_list_id());
+  assertEquals(1, testTaskList.getImportance());
+  assertEquals(1, testTaskList.getEstimated_time());
+  assertEquals(1, testTaskList.getDifficulty());
+}
+
+@Test
+public void delete_removesEntryFromDatabase_true(){
+  assertTrue(TaskList.all().size() == 1);
+  testTaskList.delete("TaskLists");
+  assertTrue(TaskList.all().size() == 0);
+}
+
+//TODO all test
+
+@Test
+public void save_savesEntryIntoDatabase_true(){
+  assertEquals(1, TaskList.all().size());
+}
+
+@Test
+public void equals_returnsWhetherAttributesAreEqual_true(){
+  assertTrue(testTaskList.getId()>0);
+  assertEquals("Laundry", testTaskList.getName());
+}
+
+@Test
+public void update_changesNameDueSkillPriorityTaskListListImportanceEstTimeDifficulty_true(){
+  Timestamp changeDate = Timestamp.valueOf(LocalDateTime.now().plusDays(20));
+  testTaskList.update("Vacuum", changeDate, 2, 2, 2, 2, true, 1000, 2);
+  assertEquals("Vacuum",TaskList.find(testTaskList.getId()).getName());
+  assertEquals(changeDate,TaskList.find(testTaskList.getId()).getDue());
+  assertEquals(2,TaskList.find(testTaskList.getId()).getSkill_id());
+  assertEquals(2,TaskList.find(testTaskList.getId()).getPriority_level());
+  assertEquals(2,TaskList.find(testTaskList.getId()).getTaskList_list_id());
+  assertEquals(2,TaskList.find(testTaskList.getId()).getImportance());
+  assertTrue(TaskList.find(testTaskList.getId()).getCompleted());
+  assertEquals(1000,TaskList.find(testTaskList.getId()).getEstimated_time());
+  assertEquals(2,TaskList.find(testTaskList.getId()).getDifficulty());
+}
