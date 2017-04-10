@@ -41,16 +41,21 @@ public class User {
 
   public int checkIfLevelUp() {
     int calculatedLevel = 0;
-    int calcLevelHund = calculatedLevel * 100;
+    int calcLevelHund = 100;
 
     for (int i = this.experience; i >= 0; i -= calcLevelHund) {
       calculatedLevel++;
+
+      if (calculatedLevel == 1) {
+        calcLevelHund = 200;
+      } else {
+      calcLevelHund = calculatedLevel * 100;
     }
+    
+  }
 
     return calculatedLevel;
-    }
-
-
+  }
 
 
   //DB stuff below
@@ -82,15 +87,14 @@ public class User {
      String sql = "UPDATE users SET level = :level WHERE id = :id";
      con.createQuery(sql)
      .addParameter("id", id)
-     .addParameter("level", this.level)
+     .addParameter("level", level)
      .executeUpdate();
    }
  }
 
   public void saveUserToDatabase() {
      try(Connection con = DB.sql2o.open()) {
-       //TODO: add created time to users table
-       String sql = "INSERT INTO users (name, level, experience) VALUES (:name, :level, :experience)";
+       String sql = "INSERT INTO users (name, level, experience, created) VALUES (:name, :level, :experience, now())";
        this.id = (int) con.createQuery(sql, true)
        .addParameter("name", this.name)
        .addParameter("level", this.level)
@@ -105,6 +109,7 @@ public class User {
        String sql = "SELECT * FROM users WHERE id = :id";
        User client = con.createQuery(sql)
        .addParameter("id", id)
+       .throwOnMappingFailure(false)
        .executeAndFetchFirst(User.class);
        return client;
      }
