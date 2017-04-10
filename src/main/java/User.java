@@ -14,8 +14,7 @@ public class User {
   private int id;
   private int level;
   private int experience;
-  // private Map<int, int> experienceLevelMap = new HashMap<int,int>();
-
+  private Timestamp created;
 
   public User(String name) {
     this.name = name;
@@ -39,6 +38,10 @@ public class User {
     return this.experience;
   }
 
+  public Timestamp getUserCreated() {
+    return created;
+  }
+
   public int checkIfLevelUp() {
     int calculatedLevel = 0;
     int calcLevelHund = 100;
@@ -50,7 +53,7 @@ public class User {
         calcLevelHund = 200;
       } else {
       calcLevelHund = calculatedLevel * 100;
-    }  
+    }
   }
 
     return calculatedLevel;

@@ -27,9 +27,12 @@ public class UserTest {
 
  @Test
  public void user_instantiatesCorrectly_true() {
+   Timestamp rightNow = new Timestamp(new Date().getTime());
    assertTrue(testUser.getUserName().equals("Jemina"));
    assertTrue(testUser.getUserLevel() == 0);
    assertTrue(testUser.getUserExperience() == 0);
+   assertTrue(testUser.getUserId() > 0);
+   assertEquals(rightNow.getDay(), User.findUser(testUser.getUserId()).getUserCreated().getDay());
  }
 
  @Test
@@ -52,6 +55,7 @@ public class UserTest {
    testUser.updateUserExperience(1000);
    assertEquals(4, User.findUser(testUser.getUserId()).checkIfLevelUp());
  }
+
 
 
 }
