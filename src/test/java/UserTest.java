@@ -14,4 +14,13 @@ public class UserTest {
   @Rule
   public DatabaseRule database = new DatabaseRule();
 
+ @Test
+ public void user_instantiatesCorrectly_true() {
+   User testUser = new User("Jemina");
+   testUser.saveUserToDatabase();
+   assertTrue(testUser.getUserName().equals("Joe"));
+
+ }
+
+
 }
