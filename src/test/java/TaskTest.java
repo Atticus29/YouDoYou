@@ -70,4 +70,19 @@ public class TaskTest {
     assertEquals("Laundry", testTask.getName());
   }
 
+  @Test
+  public void update_changesNameDueSkillPriorityTaskListImportanceEstTimeDifficulty_true(){
+    Timestamp changeDate = Timestamp.valueOf(LocalDateTime.now().plusDays(20));
+    testTask.update("Vacuum", changeDate, 2, 2, 2, 2, true, 1000, 2);
+    assertEquals("Vacuum",Task.find(testTask.getId()).getName());
+    assertEquals(changeDate,Task.find(testTask.getId()).getDue());
+    assertEquals(2,Task.find(testTask.getId()).getSkill_id());
+    assertEquals(2,Task.find(testTask.getId()).getPriority_level());
+    assertEquals(2,Task.find(testTask.getId()).getTask_list_id());
+    assertEquals(2,Task.find(testTask.getId()).getImportance());
+    assertTrue(Task.find(testTask.getId()).getCompleted());
+    assertEquals(1000,Task.find(testTask.getId()).getEstimated_time());
+    assertEquals(2,Task.find(testTask.getId()).getDifficulty());
+  }
+
 }
