@@ -11,12 +11,15 @@ import java.time.LocalDateTime;
 public abstract class TodoAbstract {
   public String name;
   public Timestamp created;
-  public Timestamp due_time;
+  public Timestamp due;
   public int user_id;
   public int skill_id;
   public int priority_level;
   public boolean completed;
   public int id;
+
+
+
 
   public void markCompleted(){
     this.completed = true;
@@ -30,8 +33,8 @@ public abstract class TodoAbstract {
     return this.created;
   }
 
-  public Timestamp getDue_time(){
-    return this.due_time;
+  public Timestamp getDue(){
+    return this.due;
   }
 
   public int getUser_id(){
@@ -55,14 +58,26 @@ public abstract class TodoAbstract {
   }
 
   public void delete(String tableName){
-    String sqlQuery = "SELECT * FROM :table_name WHERE id=:id;";
+    String sqlQuery = String.format("DELETE FROM %s WHERE id=:id;", tableName);
     try(Connection con=DB.sql2o.open()){
       con.createQuery(sqlQuery)
-        .addParameter("table_name", tableName)
-        .addParameter("id", this.id)
-        .executeUpdate();
+      .addParameter("id", this.id)
+      .executeUpdate();
     }
   }
+
+  // public List<Object> all(String tableName){
+  //   String sqlQuery = "SELECT * FROM :table_name WHERE id=:id;";
+  //   try(Connection con=DB.sql2o.open()){
+  //     List<Object> results = con.createQuery(sqlQuery)
+  //     .addParameter("table_name", tableName)
+  //     .addParameter("id", this.id)
+  //     .executeAndFetch(Object.class);
+  //     return results;
+  //   }
+  // }
+
+
 
 
 
