@@ -39,7 +39,7 @@ public class TaskListTest {
 
   @Test
   public void getters_returnExpectedValues_true(){
-    assertEquals("Laundry", testTaskList.getName());
+    assertEquals("Household Chores", testTaskList.getName());
     Timestamp expectedDate = Timestamp.valueOf(LocalDateTime.now().plusDays(10));
     assertEquals(expectedDate.getDate(), testTaskList.getDue().getDate());
     assertEquals(1, testTaskList.getUser_id());
