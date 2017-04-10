@@ -29,6 +29,10 @@ CREATE TABLE users (id serial PRIMARY KEY, name varchar, level int, experience i
 CREATE TABLE avatar (id serial PRIMARY KEY, user_id int);
 CREATE TABLE analytics (id serial PRIMARY KEY, user_id int);
 
+* test database:
+CREATE DATABASE you_do_you_test WITH TEMPLATE you_do_you;
+
+DROP DATABASE you_do_you_test;
 
 ### License
 
