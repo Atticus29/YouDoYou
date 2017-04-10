@@ -7,14 +7,11 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.sql.Timestamp;
 
-public class Task implements DatabaseManagement {
-  private String name;
-  private Timestamp created;
-  private Timestamp due_time;
-  private int difficulty;
-
-  public Task() {
-
-  }
-
+public abstract class TodoAbstract {
+  public String name;
+  public Timestamp created;
+  public Timestamp due_time;
+  public int user_id;
+  public int skill_id;
+  public int priority_level;
 }
