@@ -50,8 +50,7 @@ public class User {
         calcLevelHund = 200;
       } else {
       calcLevelHund = calculatedLevel * 100;
-    }
-    
+    }  
   }
 
     return calculatedLevel;
