@@ -117,6 +117,16 @@ public class User {
      }
    }
 
+   public List<Skill> findAllUserSkills() {
+     try(Connection con = DB.sql2o.open()) {
+       String sql = "SELECT * FROM skills WHERE user_id = :id";
+       return con.createQuery(sql)
+       .addParameter("id", this.id)
+       .throwOnMappingFailure(false)
+       .executeAndFetch(Skill.class);
+     }
+   }
+
 
    @Override
    public boolean equals(Object otherUser){

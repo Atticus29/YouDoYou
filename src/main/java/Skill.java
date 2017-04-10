@@ -102,11 +102,12 @@ public class Skill {
 
   public void saveSkillToDatabase() {
      try(Connection con = DB.sql2o.open()) {
-       String sql = "INSERT INTO skills (name, level, experience, created) VALUES (:name, :level, :experience, now())";
+       String sql = "INSERT INTO skills (name, level, experience, created, user_id) VALUES (:name, :level, :experience, now(), :userId)";
        this.id = (int) con.createQuery(sql, true)
        .addParameter("name", this.name)
        .addParameter("level", this.level)
        .addParameter("experience", this.experience)
+       .addParameter("userId", this.userId)
        .addColumnMapping("user_id", "userId")
        .executeUpdate()
        .getKey();
