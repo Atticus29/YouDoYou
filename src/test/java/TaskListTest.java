@@ -17,7 +17,7 @@ public class TaskListTest {
   public void setUp(){
     Timestamp newDate = Timestamp.valueOf(LocalDateTime.now().plusDays(10));
     testTaskList = new TaskList("Household Chores", 1, newDate, 1, 1);
-    // testTaskList.save();
+    testTaskList.save();
   }
 
   @Rule
@@ -50,39 +50,44 @@ public class TaskListTest {
     assertEquals(2, testTaskList.getNumber_tasks());
   }
 
-  // @Test
-  // public void delete_removesEntryFromDatabase_true(){
-  //   assertTrue(TaskList.all().size() == 1);
-  //   testTaskList.delete("TaskLists");
-  //   assertTrue(TaskList.all().size() == 0);
-  // }
-  //
-  // //TODO all test
-  //
-  // @Test
-  // public void save_savesEntryIntoDatabase_true(){
-  //   assertEquals(1, TaskList.all().size());
-  // }
-  //
-  // @Test
-  // public void equals_returnsWhetherAttributesAreEqual_true(){
-  //   assertTrue(testTaskList.getId()>0);
-  //   assertEquals("Laundry", testTaskList.getName());
-  // }
-  //
-  // @Test
-  // public void update_changesNameDueSkillPriorityTaskListListImportanceEstTimeDifficulty_true(){
-  //   Timestamp changeDate = Timestamp.valueOf(LocalDateTime.now().plusDays(20));
-  //   testTaskList.update("Vacuum", changeDate, 2, 2, 2, 2, true, 1000, 2);
-  //   assertEquals("Vacuum",TaskList.find(testTaskList.getId()).getName());
-  //   assertEquals(changeDate,TaskList.find(testTaskList.getId()).getDue());
-  //   assertEquals(2,TaskList.find(testTaskList.getId()).getSkill_id());
-  //   assertEquals(2,TaskList.find(testTaskList.getId()).getPriority_level());
-  //   assertEquals(2,TaskList.find(testTaskList.getId()).getTaskList_list_id());
-  //   assertEquals(2,TaskList.find(testTaskList.getId()).getImportance());
-  //   assertTrue(TaskList.find(testTaskList.getId()).getCompleted());
-  //   assertEquals(1000,TaskList.find(testTaskList.getId()).getEstimated_time());
-  //   assertEquals(2,TaskList.find(testTaskList.getId()).getDifficulty());
-  // }
+  @Test
+  public void delete_removesEntryFromDatabase_true(){
+    assertTrue(TaskList.all().size() == 1);
+    testTaskList.delete("task_lists");
+    assertTrue(TaskList.all().size() == 0);
+  }
+
+  //TODO all test
+
+  @Test
+  public void save_savesEntryIntoDatabase_true(){
+    assertEquals(1, TaskList.all().size());
+    assertTrue(TaskList.all().get(0).getCreated() instanceof Timestamp);
+  }
+
+  @Test
+  public void equals_returnsWhetherAttributesAreEqual_true(){
+    assertTrue(testTaskList.getId()>0);
+    assertEquals("Household Chores", testTaskList.getName());
+    //TODO add to this
+  }
+
+  @Test
+  public void setNumber_tasks_changesTasks_true(){
+    testTaskList.setNumber_tasks(3);
+    assertEquals(3, TaskList.all().get(0).getNumber_tasks());
+  }
+
+  @Test
+  public void update_changesNameDueSkillPriorityTaskListListImportanceEstTimeDifficulty_true(){
+    Timestamp changeDate = Timestamp.valueOf(LocalDateTime.now().plusDays(20));
+    assertFalse(TaskList.find(testTaskList.getId()).getCompleted());
+    testTaskList.update("Kitchen chores", changeDate, 2, 2, true);
+    assertEquals("Kitchen chores",TaskList.find(testTaskList.getId()).getName());
+    assertEquals(changeDate,TaskList.find(testTaskList.getId()).getDue());
+    assertEquals(2,TaskList.find(testTaskList.getId()).getSkill_id());
+    assertEquals(2,TaskList.find(testTaskList.getId()).getPriority_level());
+    assertTrue(TaskList.find(testTaskList.getId()).getCompleted());
+  }
 
 }
