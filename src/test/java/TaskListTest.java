@@ -72,12 +72,12 @@ public class TaskListTest {
     //TODO add to this
   }
 
-  // @Test
-  // public void setNumber_tasks_changesTasks_true(){
-  //   testTaskList.setNumber_tasks(3);
-  //   testTaskList.save();
-  //   assertEquals(3, TaskList.all().get(0).getNumber_tasks());
-  // }
+  @Test
+  public void setNumber_tasks_changesTasks_true(){
+    testTaskList.setNumber_tasks(3);
+    testTaskList.save();
+    assertEquals(3, TaskList.find(testTaskList.getId()).getNumber_tasks());
+  }
 
   @Test
   public void update_changesNameDueSkillPriorityTaskListListImportanceEstTimeDifficulty_true(){
@@ -89,6 +89,18 @@ public class TaskListTest {
     assertEquals(2,TaskList.find(testTaskList.getId()).getSkill_id());
     assertEquals(2,TaskList.find(testTaskList.getId()).getPriority_level());
     assertTrue(TaskList.find(testTaskList.getId()).getCompleted());
+  }
+
+  @Test
+  public void getTasks_returnsListOfTasks_true(){
+    Timestamp newDate = Timestamp.valueOf(LocalDateTime.now().plusDays(10));
+    Task testTask1 = new Task("Laundry", newDate, 1, 1, 1,testTaskList.getId(),1,1,1);
+    testTask1.save();
+    Task testTask2 = new Task("Laundry", newDate, 1, 1, 1,testTaskList.getId(),1,1,1);
+    testTask2.save();
+    List<Task> allTasks = testTaskList.getTasks();
+    assertTrue(allTasks.size() == 2);
+    assertTrue(allTasks instanceof List);
   }
 
 }
