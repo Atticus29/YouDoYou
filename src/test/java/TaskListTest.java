@@ -75,6 +75,7 @@ public class TaskListTest {
   @Test
   public void setNumber_tasks_changesTasks_true(){
     testTaskList.setNumber_tasks(3);
+    testTaskList.save();
     assertEquals(3, TaskList.find(testTaskList.getId()).getNumber_tasks());
   }
 
