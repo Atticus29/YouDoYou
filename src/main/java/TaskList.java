@@ -26,10 +26,6 @@ public class TaskList extends TodoAbstract {
     return this.number_tasks;
   }
 
-  public void markCompleted(){
-    this.completed = true;
-  }
-
   public void setNumber_tasks(int number){
     this.number_tasks = number;
   }

@@ -18,9 +18,6 @@ public abstract class TodoAbstract {
   public boolean completed;
   public int id;
 
-
-
-
   public void markCompleted(){
     this.completed = true;
   }
@@ -65,20 +62,5 @@ public abstract class TodoAbstract {
       .executeUpdate();
     }
   }
-
-  // public List<Object> all(String tableName){
-  //   String sqlQuery = "SELECT * FROM :table_name WHERE id=:id;";
-  //   try(Connection con=DB.sql2o.open()){
-  //     List<Object> results = con.createQuery(sqlQuery)
-  //     .addParameter("table_name", tableName)
-  //     .addParameter("id", this.id)
-  //     .executeAndFetch(Object.class);
-  //     return results;
-  //   }
-  // }
-
-
-
-
 
 }
