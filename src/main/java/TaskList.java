@@ -86,18 +86,28 @@ public class TaskList extends TodoAbstract {
   }
 
   public void update(String name, Timestamp due, int skill_id, int priority_level, boolean completed) {
-   try(Connection con = DB.sql2o.open()) {
-     String sql = "UPDATE task_lists SET name=:name, due=:due, skill_id=:skill_id, priority_level=:priority_level, completed=:completed WHERE id=:id;";
-     con.createQuery(sql)
-       .addParameter("id", this.id)
-       .addParameter("name", name)
-       .addParameter("due", due)
-       .addParameter("skill_id", skill_id)
-       .addParameter("priority_level", priority_level)
-       .addParameter("completed", completed)
-       .executeUpdate();
-   }
- }
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "UPDATE task_lists SET name=:name, due=:due, skill_id=:skill_id, priority_level=:priority_level, completed=:completed WHERE id=:id;";
+      con.createQuery(sql)
+      .addParameter("id", this.id)
+      .addParameter("name", name)
+      .addParameter("due", due)
+      .addParameter("skill_id", skill_id)
+      .addParameter("priority_level", priority_level)
+      .addParameter("completed", completed)
+      .executeUpdate();
+    }
+  }
+
+  public List<Task> getTasks(){
+    String sqlQuery = "SELECT * FROM tasks WHERE task_list_id=:task_list_id;";
+    try(Connection con=DB.sql2o.open()){
+      List<Task> results = con.createQuery(sqlQuery)
+        .addParameter("task_list_id", this.id)
+        .executeAndFetch(Task.class);
+      return results;
+    }
+  }
 
 
 
