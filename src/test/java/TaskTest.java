@@ -85,4 +85,17 @@ public class TaskTest {
     assertEquals(2,Task.find(testTask.getId()).getDifficulty());
   }
 
+  @Test
+  public void calculateEstimatedTimeMultiplier_returnsDoublesCorrespondingToTheConstArray_true(){
+    Timestamp newDate = Timestamp.valueOf(LocalDateTime.now().plusDays(10));
+    Task testTask1 = new Task("Laundry", newDate, 1, 1, 1,1,1,119,1);
+    assertEquals(2.0, testTask1.calculateEstimatedTimeMultiplier(testTask1.getEstimated_time()),0.001);
+    testTask1 = new Task("Laundry", newDate, 1, 1, 1,1,1,1,1);
+    assertEquals(0.2, testTask1.calculateEstimatedTimeMultiplier(testTask1.getEstimated_time()),0.001);
+    testTask1 = new Task("Laundry", newDate, 1, 1, 1,1,1,120,1);
+    assertEquals(2.0, testTask1.calculateEstimatedTimeMultiplier(testTask1.getEstimated_time()),0.001);
+    testTask1 = new Task("Laundry", newDate, 1, 1, 1,1,1,3000,1);
+    assertEquals(2, testTask1.calculateEstimatedTimeMultiplier(testTask1.getEstimated_time()),0.001);
+  }
+
 }

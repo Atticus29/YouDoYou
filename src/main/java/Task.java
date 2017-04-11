@@ -14,6 +14,7 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
   private int importance;
   private int difficulty;
 
+
   public Task(String name, Timestamp due, int user_id, int skill_id, int priority_level, int task_list_id, int importance, int estimated_time, int difficulty) {
     this.name = name;
     this.created = new Timestamp(new Date().getTime()); //TODO
@@ -26,6 +27,31 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
     this.importance = importance;
     this.estimated_time = estimated_time;
     this.difficulty = difficulty;
+  }
+
+  public void markCompleted(){
+    this.completed = true;
+    double pointsToAdd = 10 * Task.POINT_RANGE[this.importance-1] * Task.POINT_RANGE[this.difficulty-1] * calculateEstimatedTimeMultiplier(this.estimated_time);
+    //TODO update experience
+  }
+
+
+  public double calculateEstimatedTimeMultiplier(double minutes){
+    if(minutes <1){
+      throw new UnsupportedOperationException("Inappropriate number of minutes");
+    }
+    if(minutes == 1){
+      return Task.POINT_RANGE[0];
+    } else if(minutes > Task.EST_TIME_CEILING){
+      return Task.POINT_RANGE[Task.POINT_RANGE.length-1];
+    }
+    else{
+      double incrementor = (Task.EST_TIME_CEILING - 1.0)/9.0;
+      System.out.println("incrementor is " + incrementor);
+      int elementIndexToGet = (int) Math.floor(minutes/incrementor);
+      System.out.println("index to seek is " + elementIndexToGet);
+      return Task.POINT_RANGE[elementIndexToGet];
+    }
   }
 
   public int getImportance(){
@@ -104,21 +130,21 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
   }
 
   public void update(String name, Timestamp due, int skill_id, int priority_level, int task_list_id, int importance, boolean completed, int estimated_time, int difficulty) {
-   try(Connection con = DB.sql2o.open()) {
-     String sql = "UPDATE tasks SET name=:name, due=:due, skill_id=:skill_id, priority_level=:priority_level, task_list_id=:task_list_id, importance=:importance, completed=:completed, estimated_time=:estimated_time, difficulty=:difficulty WHERE id=:id;";
-     con.createQuery(sql)
-       .addParameter("id", this.id)
-       .addParameter("name", name)
-       .addParameter("due", due)
-       .addParameter("skill_id", skill_id)
-       .addParameter("priority_level", priority_level)
-       .addParameter("task_list_id", task_list_id)
-       .addParameter("importance", importance)
-       .addParameter("completed", completed)
-       .addParameter("estimated_time", estimated_time)
-       .addParameter("difficulty", difficulty)
-       .executeUpdate();
-   }
- }
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "UPDATE tasks SET name=:name, due=:due, skill_id=:skill_id, priority_level=:priority_level, task_list_id=:task_list_id, importance=:importance, completed=:completed, estimated_time=:estimated_time, difficulty=:difficulty WHERE id=:id;";
+      con.createQuery(sql)
+      .addParameter("id", this.id)
+      .addParameter("name", name)
+      .addParameter("due", due)
+      .addParameter("skill_id", skill_id)
+      .addParameter("priority_level", priority_level)
+      .addParameter("task_list_id", task_list_id)
+      .addParameter("importance", importance)
+      .addParameter("completed", completed)
+      .addParameter("estimated_time", estimated_time)
+      .addParameter("difficulty", difficulty)
+      .executeUpdate();
+    }
+  }
 
 }

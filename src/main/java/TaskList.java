@@ -22,6 +22,16 @@ public class TaskList extends TodoAbstract {
     // number_tasks will be incremented upon association of task with tasklist (i.e., the task constructor) TODO
   }
 
+  public void markCompleted(){
+    this.completed = true;
+    if(this.number_tasks > 2){
+      int bonusPoints = 5 * this.number_tasks;
+      //TODO update experience
+    }
+
+  }
+
+
   public int getNumber_tasks(){
     return this.number_tasks;
   }
@@ -103,8 +113,8 @@ public class TaskList extends TodoAbstract {
     String sqlQuery = "SELECT * FROM tasks WHERE task_list_id=:task_list_id;";
     try(Connection con=DB.sql2o.open()){
       List<Task> results = con.createQuery(sqlQuery)
-        .addParameter("task_list_id", this.id)
-        .executeAndFetch(Task.class);
+      .addParameter("task_list_id", this.id)
+      .executeAndFetch(Task.class);
       return results;
     }
   }
