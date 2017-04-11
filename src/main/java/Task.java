@@ -31,8 +31,11 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
 
   public void markCompleted(){
     this.completed = true;
-    double pointsToAdd = 10 * Task.POINT_RANGE[this.importance-1] * Task.POINT_RANGE[this.difficulty-1] * calculateEstimatedTimeMultiplier(this.estimated_time);
-    //TODO update experience
+    int pointsToAdd = (int) 10 * Task.POINT_RANGE[this.importance-1] * Task.POINT_RANGE[this.difficulty-1] * calculateEstimatedTimeMultiplier(this.estimated_time);
+    //TODO update experience to user
+    User currentUser = User.findUser(this.user_id);
+    int oldExp = currentUser.getUserExperience();
+    currentUser.updateUserExperience(oldExp + pointsToAdd);
   }
 
 
