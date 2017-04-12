@@ -12,11 +12,14 @@ import java.time.LocalDateTime;
 //
 public class TaskTest {
   private Task testTask;
+  private User testUser;
 
   @Before
   public void setUp(){
+    testUser = new User("Jemina");
+    testUser.saveUserToDatabase();
     Timestamp newDate = Timestamp.valueOf(LocalDateTime.now().plusDays(10));
-    testTask = new Task("Laundry", newDate, 1, 1, 1,1,1,1,1);
+    testTask = new Task("Laundry", newDate, testUser.getUserId(), 1, 1,1,1,1,1);
     testTask.save();
   }
 
@@ -40,7 +43,7 @@ public class TaskTest {
     assertEquals("Laundry", testTask.getName());
     Timestamp expectedDate = Timestamp.valueOf(LocalDateTime.now().plusDays(10));
     assertEquals(expectedDate.getDate(), testTask.getDue().getDate());
-    assertEquals(1, testTask.getUser_id());
+    assertEquals(testUser.getUserId(), testTask.getUser_id());
     assertEquals(1, testTask.getSkill_id());
     assertEquals(1, testTask.getPriority_level());
     assertFalse(testTask.getCompleted());
