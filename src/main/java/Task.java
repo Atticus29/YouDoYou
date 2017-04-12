@@ -31,21 +31,21 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
 
   public void markCompleted(){
     this.completed = true;
-    System.out.println("importance multiplier is " + Task.POINT_RANGE[this.importance-1]);
-    System.out.println("difficulty multiplier is " + Task.POINT_RANGE[this.difficulty-1]);
-    System.out.println("estimated time multiplier is" + calculateEstimatedTimeMultiplier(this.estimated_time));
+
     int pointsToAdd = (int)(10 * Task.POINT_RANGE[this.importance-1]* Task.POINT_RANGE[this.difficulty-1]* calculateEstimatedTimeMultiplier(this.estimated_time));
-    System.out.println("pointsToAdd is " + pointsToAdd);
+
     //TODO update experience to user
     User currentUser = User.findUser(this.user_id);
     int oldExp = currentUser.getUserExperience();
+    System.out.println("old experience points is " + oldExp);
     currentUser.updateUserExperience(oldExp + pointsToAdd);
+    System.out.println("New experience is " + User.findUser(currentUser.getUserId()).getUserExperience());
   }
 
 
   public double calculateEstimatedTimeMultiplier(double minutes){
     if(minutes <1){
-      throw new UnsupportedOperationException("Inappropriate number of minutes");
+      throw new UnsupportedOperationException("Inappropriate number of minutes (less than 1)");
     }
     if(minutes == 1){
       return Task.POINT_RANGE[0];
@@ -54,9 +54,7 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
     }
     else{
       double incrementor = (Task.EST_TIME_CEILING - 1.0)/9.0;
-      System.out.println("incrementor is " + incrementor);
       int elementIndexToGet = (int) Math.floor(minutes/incrementor);
-      System.out.println("index to seek is " + elementIndexToGet);
       return Task.POINT_RANGE[elementIndexToGet];
     }
   }

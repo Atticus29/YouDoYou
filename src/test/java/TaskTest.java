@@ -40,6 +40,14 @@ public class TaskTest {
   }
 
   @Test
+  public void markCompleted_forSuperEasyTaskAddsTenPointsToUsersExperienceLevel_true(){
+    assertEquals(0, testUser.getUserExperience());
+    testTask.markCompleted();
+    assertEquals(10, User.findUser(testUser.getUserId()).getUserExperience());
+
+  }
+
+  @Test
   public void getters_returnExpectedValues_true(){
     assertEquals("Laundry", testTask.getName());
     Timestamp expectedDate = Timestamp.valueOf(LocalDateTime.now().plusDays(10));
