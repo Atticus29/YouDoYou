@@ -13,7 +13,7 @@ public class DayTest {
   @Test
   public void testDay_instanceOfDay() {
     Timestamp newDate = Timestamp.valueOf(LocalDateTime.now().plusDays(10));
-    Task testTask = new Task("Laundry", newDate, 1, 1, 1,1,1,1,1);
+    Task testTask = new Task("Laundry", newDate, 1, 1, 1,1,1);
     testTask.save();
     Day testDay = new Day();
     assertEquals(true, testDay instanceof Day);
@@ -22,7 +22,7 @@ public class DayTest {
   @Test
   public void getCompleted_returnsValue_1(){
     Timestamp newDate = Timestamp.valueOf(LocalDateTime.now().plusDays(10));
-    Task testTask = new Task("Laundry", newDate, 1, 1, 1,1,1,1,1);
+    Task testTask = new Task("Laundry", newDate, 1, 1, 1,1,1);
     testTask.save();
     testTask.update("Vacuum", newDate, 2, 2, 2, 2, true, 1000, 2);
     Day testDay = new Day();

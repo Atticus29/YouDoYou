@@ -15,18 +15,24 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
   private int difficulty;
 
 
-  public Task(String name, Timestamp due, int user_id, int skill_id, int priority_level, int task_list_id, int importance, int estimated_time, int difficulty) {
+  public Task(String name, Timestamp due, int user_id, int priority_level, int importance, int estimated_time, int difficulty) {
     this.name = name;
     this.created = new Timestamp(new Date().getTime()); //TODO
     this.due = due;
     this.user_id = user_id;
-    this.skill_id = skill_id;
     this.priority_level = priority_level;
     this.completed = false;
-    this.task_list_id = task_list_id;
     this.importance = importance;
     this.estimated_time = estimated_time;
     this.difficulty = difficulty;
+  }
+
+  public void associateTaskWithSkill(int skill_id){
+    this.skill_id = skill_id;
+  }
+
+  public void associateTaskWithTaskList(int task_list_id){
+    this.task_list_id = task_list_id;
   }
 
   public void markCompleted(){

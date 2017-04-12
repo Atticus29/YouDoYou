@@ -24,6 +24,10 @@ public class TaskList extends TodoAbstract {
     // number_tasks will be incremented upon association of task with tasklist (i.e., the task constructor) TODO
   }
 
+  public boolean getBonusPointsAdded(){
+    return this.bonusPointsAdded;
+  }
+
   public boolean allTasksDone(){
     List<Task> tasksInThisTaskList = this.getTasks();
     System.out.println("tasksInThisTaskList size is " + tasksInThisTaskList.size());

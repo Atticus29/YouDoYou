@@ -12,12 +12,24 @@ import java.time.LocalDateTime;
 
 public class TaskListTest {
   private TaskList testTaskList;
+  private Timestamp newDate;
+  private Task testTask;
+  private User testUser;
+  private Skill testSkill;
 
   @Before
   public void setUp(){
-    Timestamp newDate = Timestamp.valueOf(LocalDateTime.now().plusDays(10));
+    testUser = new User("Jemina");
+    testUser.saveUserToDatabase();
+    newDate = Timestamp.valueOf(LocalDateTime.now().plusDays(10));
+    testSkill = new Skill("Chore ninja", testUser.getUserId());
     testTaskList = new TaskList("Household Chores", 1, newDate, 1, 1);
     testTaskList.save();
+    testTask = new Task("Laundry", newDate, testUser.getUserId(), 1, 1,1,1);
+    testTask.associateTaskWithTaskList(testTaskList.getId());
+    testTask.associateTaskWithSkill(testSkill.getSkillId());
+    testTask.save();
+    //TODO could DRY up some tests by adding testTask and linking it to testTaskList (instead of testTaskList2)
   }
 
   @Rule
@@ -31,6 +43,8 @@ public class TaskListTest {
   @Test
   public void markCompleted_marksATaskListTrueForCompleted_true(){
     assertFalse(testTaskList.getCompleted());
+    testTask.markCompleted();
+    testTask.update(testTask.getName(), testTask.getDue(), testTask.getSkill_id(), testTask.getPriority_level(), testTask.getTask_list_id(), testTask.getImportance(), testTask.getCompleted(), testTask.getEstimated_time(), testTask.getDifficulty());
     testTaskList.markCompleted();
     assertTrue(testTaskList.getCompleted());
   }
@@ -91,10 +105,9 @@ public class TaskListTest {
 
   @Test
   public void getTasks_returnsListOfTasks_true(){
-    Timestamp newDate = Timestamp.valueOf(LocalDateTime.now().plusDays(10));
-    Task testTask1 = new Task("Laundry", newDate, 1, 1, 1,testTaskList.getId(),1,1,1);
-    testTask1.save();
-    Task testTask2 = new Task("Laundry", newDate, 1, 1, 1,testTaskList.getId(),1,1,1);
+    Task testTask2 = new Task("Laundry", newDate, 1, 1, 1,1,1);
+    testTask2.associateTaskWithTaskList(testTaskList.getId());
+    testTask2.associateTaskWithSkill(testSkill.getSkillId());
     testTask2.save();
     List<Task> allTasks = testTaskList.getTasks();
     assertTrue(allTasks.size() == 2);
@@ -103,76 +116,72 @@ public class TaskListTest {
 
   @Test
   public void allTasksDone_correctlyDeterminesWhetherAllTasksHaveBeenCompleted_true(){
-    User testUser = new User("Jemina");
-    testUser.saveUserToDatabase();
-    Timestamp newDate = Timestamp.valueOf(LocalDateTime.now().plusDays(10));
-    TaskList testTaskList2 = new TaskList("Household Chores", 1, newDate, 1, testUser.getUserId());
-    Task testTask = new Task("Laundry", newDate, testUser.getUserId(), 1, 1,testTaskList2.getId(),1,1,1);
-    testTask.save();
-    assertFalse(testTaskList2.allTasksDone());
+    assertFalse(testTaskList.allTasksDone());
     testTask.markCompleted();
     testTask.update(testTask.getName(), testTask.getDue(), testTask.getSkill_id(), testTask.getPriority_level(), testTask.getTask_list_id(), testTask.getImportance(), testTask.getCompleted(), testTask.getEstimated_time(), testTask.getDifficulty());
-    assertTrue(testTaskList2.allTasksDone());
+    assertTrue(testTaskList.allTasksDone());
   }
 
   @Test
   public void markCompleted_onlyWorksIfChildTasksExistAndAreDone_true(){
     // No tasks
-    testTaskList.markCompleted();
-    assertFalse(testTaskList.getCompleted());
+    TaskList testTaskList2 = new TaskList("Household Chores", 1, newDate, 1, testUser.getUserId());
+    testTaskList2.markCompleted();
+    testTaskList2.update(testTaskList2.getName(), testTaskList2.getDue(), testTaskList2.getSkill_id(), testTaskList2.getPriority_level(), testTaskList2.getCompleted());
+    assertFalse(testTaskList2.getCompleted());
 
     // Add a task but incomplete
-    User testUser = new User("Jemina");
-    testUser.saveUserToDatabase();
-    Timestamp newDate = Timestamp.valueOf(LocalDateTime.now().plusDays(10));
-    TaskList testTaskList2 = new TaskList("Household Chores", 1, newDate, 1, testUser.getUserId());
-    Task testTask = new Task("Laundry", newDate, testUser.getUserId(), 1, 1,testTaskList2.getId(),1,1,1);
-    testTask.save();
-    testTaskList.markCompleted();
-    assertFalse(testTaskList.getCompleted());
+    testTask.associateTaskWithTaskList(testTaskList2.getId());
+    testTask.update(testTask.getName(), testTask.getDue(), testTask.getSkill_id(), testTask.getPriority_level(), testTask.getTask_list_id(), testTask.getImportance(), testTask.getCompleted(), testTask.getEstimated_time(), testTask.getDifficulty());
+
+    testTaskList2.markCompleted();
+    testTaskList2.update(testTaskList2.getName(), testTaskList2.getDue(), testTaskList2.getSkill_id(), testTaskList2.getPriority_level(), testTaskList2.getCompleted());
+    assertFalse(testTaskList2.getCompleted());
 
     // Now complete task
     testTask.markCompleted();
     testTask.update(testTask.getName(), testTask.getDue(), testTask.getSkill_id(), testTask.getPriority_level(), testTask.getTask_list_id(), testTask.getImportance(), testTask.getCompleted(), testTask.getEstimated_time(), testTask.getDifficulty());
-    testTaskList.markCompleted();
-    assertTrue(testTaskList.getCompleted());
+    testTaskList2.markCompleted();
+    testTaskList2.update(testTaskList2.getName(), testTaskList2.getDue(), testTaskList2.getSkill_id(), testTaskList2.getPriority_level(), testTaskList2.getCompleted());
+    assertTrue(testTaskList2.getCompleted());
   }
 
   @Test
   public void markCompleted_AddsBonusPointsToUser_true(){
-    User testUser = new User("Jemina");
-    testUser.saveUserToDatabase();
-    Timestamp newDate = Timestamp.valueOf(LocalDateTime.now().plusDays(10));
-    TaskList testTaskList2 = new TaskList("Household Chores", 1, newDate, 1, testUser.getUserId());
-    Task testTask = new Task("Laundry", newDate, testUser.getUserId(), 1, 1,testTaskList2.getId(),1,1,1);
-    testTask.save();
     testTask.markCompleted();
     testTask.update(testTask.getName(), testTask.getDue(), testTask.getSkill_id(), testTask.getPriority_level(), testTask.getTask_list_id(), testTask.getImportance(), testTask.getCompleted(), testTask.getEstimated_time(), testTask.getDifficulty());
     int oldUserExperience = testUser.getUserExperience();
+    System.out.println("oldUserExperience is " + oldUserExperience);
+    assertFalse(testTaskList.getCompleted());
+    assertFalse(testTaskList.getBonusPointsAdded());
+
     testTaskList.markCompleted();
+    assertTrue(testTaskList.getCompleted());
+    assertTrue(testTaskList.getBonusPointsAdded());
+
+    testTaskList.update(testTaskList.getName(), testTaskList.getDue(), testTaskList.getSkill_id(), testTaskList.getPriority_level(), testTaskList.getCompleted());
     int newUserExperience = testUser.getUserExperience();
+    System.out.println("newUserExperience is " + newUserExperience);
     assertTrue(newUserExperience > oldUserExperience);
   }
 
   @Test
   public void markCompleted_onlyAddBonusPointsOnce_true(){
-    // add and comlete first and only task. Mark taskList complete
-    User testUser = new User("Jemina");
-    testUser.saveUserToDatabase();
-    Timestamp newDate = Timestamp.valueOf(LocalDateTime.now().plusDays(10));
-    TaskList testTaskList2 = new TaskList("Household Chores", 1, newDate, 1, testUser.getUserId());
-    Task testTask = new Task("Laundry", newDate, testUser.getUserId(), 1, 1,testTaskList2.getId(),1,1,1);
-    testTask.save();
+    // add and complete first and only task. Mark taskList complete
     testTask.markCompleted();
     testTask.update(testTask.getName(), testTask.getDue(), testTask.getSkill_id(), testTask.getPriority_level(), testTask.getTask_list_id(), testTask.getImportance(), testTask.getCompleted(), testTask.getEstimated_time(), testTask.getDifficulty());
     testTaskList.markCompleted();
+    testTaskList.update(testTaskList.getName(), testTaskList.getDue(), testTaskList.getSkill_id(), testTaskList.getPriority_level(), testTaskList.getCompleted());
     int oldUserExperience = testUser.getUserExperience();
 
     // Now add a second task and mark complete. Now try to game the system by getting extra bonus points by marking TaskList complete again
-    Task testTask2 = new Task("Dishes", newDate, testUser.getUserId(), 1, 1,testTaskList2.getId(),1,1,1);
+    Task testTask2 = new Task("Dishes", newDate, 1, 1,1,1,1);
+    testTask2.associateTaskWithTaskList(testTaskList.getId());
+    testTask2.associateTaskWithSkill(testSkill.getSkillId());
     testTask2.markCompleted();
     testTask2.update(testTask2.getName(), testTask2.getDue(), testTask2.getSkill_id(), testTask2.getPriority_level(), testTask2.getTask_list_id(), testTask2.getImportance(), testTask2.getCompleted(), testTask2.getEstimated_time(), testTask2.getDifficulty());
     testTaskList.markCompleted();
+    testTaskList.update(testTaskList.getName(), testTaskList.getDue(), testTaskList.getSkill_id(), testTaskList.getPriority_level(), testTaskList.getCompleted());
     int newUserExperience = testUser.getUserExperience();
     assertEquals(oldUserExperience, newUserExperience);
   }
