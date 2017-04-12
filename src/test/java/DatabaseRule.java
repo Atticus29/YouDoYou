@@ -5,15 +5,16 @@ public class DatabaseRule extends ExternalResource {
 
   @Override
   protected void before() {
-    DB.sql2o = new
-    Sql2o("jdbc:postgresql://postgresql.cnkomjq87c0e.us-west-2.rds.amazonaws.com:5432/you_do_you_test", "grimmello", System.getenv("DB_PASS"));
+    // DB.sql2o = new Sql2o("jdbc:postgresql://postgresql.cnkomjq87c0e.us-west-2.rds.amazonaws.com:5432/you_do_you_test", "grimmello", System.getenv("DB_PASS"));
+
+    DB.sql2o = new Sql2o("jdbc:postgresql://localhost:5432/you_do_you_test", null, null);
   }
 
   @Override
   protected void after() {
     try(Connection con = DB.sql2o.open()) {
-      String deleteAvatarQuery = "DELETE FROM avatars *;";
-      con.createQuery(deleteAvatarQuery).executeUpdate();
+      // String deleteAvatarQuery = "DELETE FROM avatars *;";
+      // con.createQuery(deleteAvatarQuery).executeUpdate();
       String deleteUserQuery = "DELETE FROM users *;";
       con.createQuery(deleteUserQuery).executeUpdate();
       String deleteSkillQuery = "DELETE FROM skills *;";

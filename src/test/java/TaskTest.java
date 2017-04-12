@@ -13,12 +13,13 @@ import java.time.LocalDateTime;
 public class TaskTest {
   private Task testTask;
   private User testUser;
+  private Timestamp newDate;
 
   @Before
   public void setUp(){
     testUser = new User("Jemina");
     testUser.saveUserToDatabase();
-    Timestamp newDate = Timestamp.valueOf(LocalDateTime.now().plusDays(10));
+    newDate = Timestamp.valueOf(LocalDateTime.now().plusDays(10));
     testTask = new Task("Laundry", newDate, testUser.getUserId(), 1, 1,1,1);
     testTask.save();
   }
@@ -46,7 +47,27 @@ public class TaskTest {
     assertEquals(10, User.findUser(testUser.getUserId()).getUserExperience());
   }
 
+  @Test
+  public void associateTaskWithTaskList_GivesCorrectTaskI_true(){
+    TaskList testTaskList = new TaskList("Drudgery", 1, newDate, 7,7);
+    testTaskList.save();
+    int testTaskListId = testTaskList.getId();
+    testTask.associateTaskWithTaskList(testTaskListId);
+    assertEquals(testTaskListId, testTask.getTask_list_id());
+  }
+
+  @Test
+  public void associateTaskWithTaskList_incrementsNumberTasksOfAssociatedTaskList_true(){
+    TaskList testTaskList = new TaskList("Drudgery", 1, newDate, 7,7);
+    testTaskList.save();
+    assertEquals(0, testTaskList.getNumber_tasks());
+    int testTaskListId = testTaskList.getId();
+    testTask.associateTaskWithTaskList(testTaskListId);
+    assertEquals(1, testTaskList.getNumber_tasks());
+  }
+
   // @Test
+  //TODO bring this back in
   // public void getters_returnExpectedValues_true(){
   //   assertEquals("Laundry", testTask.getName());
   //   Timestamp expectedDate = Timestamp.valueOf(LocalDateTime.now().plusDays(10));

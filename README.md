@@ -41,7 +41,7 @@ _Example text for the description of the project_
 
 `CREATE TABLE analytics (id serial PRIMARY KEY, user_id int);`
 
-`CREATE TABLE days (id serial PRIMARY KEY, tasksCompleted int)`
+`CREATE TABLE days (id serial PRIMARY KEY, tasksCompleted int);`
 
 <!-- * test database: -->
 `CREATE DATABASE you_do_you_test WITH TEMPLATE you_do_you;`

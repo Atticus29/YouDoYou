@@ -30,12 +30,9 @@ public class TaskList extends TodoAbstract {
 
   public boolean allTasksDone(){
     List<Task> tasksInThisTaskList = this.getTasks();
-    System.out.println("tasksInThisTaskList size is " + tasksInThisTaskList.size());
     boolean returnVal = true;
     for(Task task : tasksInThisTaskList){
-      // System.out.println("Got into for loop");
       if (task.getCompleted() == false){
-        System.out.println("Have an incomplete task for task " + task.getName());
         returnVal = false;
       }
     }
@@ -45,10 +42,17 @@ public class TaskList extends TodoAbstract {
   public void markCompleted(){
     if (this.getTasks().size() > 0 && this.allTasksDone()){
       this.completed = true;
-      if(this.number_tasks > 2 && !this.bonusPointsAdded){
+      System.out.println("number_tasks is " + this.number_tasks);
+      //TODO find out why number_tasks isn't incrementing. For now, a workaround
+      if(this.getTasks().size() > 2 && !this.bonusPointsAdded){
         int bonusPoints = 5 * this.number_tasks;
+        System.out.println("user id is " + this.getUser_id());
         User currentUser = User.findUser(this.getUser_id());
+        System.out.println("currentUser is " + (currentUser instanceof User));
+        // System.out.println("is null " + currentUser == null);
         int oldExp = currentUser.getUserExperience();
+        // System.out.println("oldExp is" + oldExp);
+        // System.out.println("is null " + oldExp==null);
         currentUser.updateUserExperience(oldExp + bonusPoints);
         this.bonusPointsAdded = true;
       }
@@ -120,9 +124,9 @@ public class TaskList extends TodoAbstract {
     }
   }
 
-  public void update(String name, Timestamp due, int skill_id, int priority_level, boolean completed) {
+  public void update(String name, Timestamp due, int skill_id, int priority_level, boolean completed, int number_tasks) {
     try(Connection con = DB.sql2o.open()) {
-      String sql = "UPDATE task_lists SET name=:name, due=:due, skill_id=:skill_id, priority_level=:priority_level, completed=:completed WHERE id=:id;";
+      String sql = "UPDATE task_lists SET name=:name, due=:due, skill_id=:skill_id, priority_level=:priority_level, completed=:completed, number_tasks=:number_tasks WHERE id=:id;";
       con.createQuery(sql)
       .addParameter("id", this.id)
       .addParameter("name", name)
@@ -130,6 +134,7 @@ public class TaskList extends TodoAbstract {
       .addParameter("skill_id", skill_id)
       .addParameter("priority_level", priority_level)
       .addParameter("completed", completed)
+      .addParameter("number_tasks", number_tasks)
       .executeUpdate();
     }
   }

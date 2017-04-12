@@ -31,8 +31,17 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
     this.skill_id = skill_id;
   }
 
+  // Note: will also add 1 to associatedTaskList's number_tasks
   public void associateTaskWithTaskList(int task_list_id){
     this.task_list_id = task_list_id;
+    TaskList currentTaskList = TaskList.find(task_list_id);
+    // System.out.println("incrementing num tasks by one for " + currentTaskList.getName());
+    System.out.println("currentTaskList's number of tasks before the increment is " + currentTaskList.getNumber_tasks());
+    currentTaskList.setNumber_tasks(currentTaskList.getNumber_tasks() + 1);
+    System.out.println("currentTaskList's number of tasks after the increment is " + currentTaskList.getNumber_tasks());
+
+    currentTaskList.update(currentTaskList.getName(), currentTaskList.getDue(), currentTaskList.getSkill_id(), currentTaskList.getPriority_level(), currentTaskList.getCompleted(), currentTaskList.getNumber_tasks());
+
   }
 
   public void markCompleted(){
