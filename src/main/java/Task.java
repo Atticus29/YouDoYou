@@ -31,10 +31,13 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
 
   public void markCompleted(){
     this.completed = true;
+    System.out.println("importance multiplier is " + Task.POINT_RANGE[this.importance-1]);
+    System.out.println("difficulty multiplier is " + Task.POINT_RANGE[this.difficulty-1]);
+    System.out.println("estimated time multiplier is" + calculateEstimatedTimeMultiplier(this.estimated_time));
     int pointsToAdd = (int)(10 * Task.POINT_RANGE[this.importance-1]* Task.POINT_RANGE[this.difficulty-1]* calculateEstimatedTimeMultiplier(this.estimated_time));
+    System.out.println("pointsToAdd is " + pointsToAdd);
     //TODO update experience to user
     User currentUser = User.findUser(this.user_id);
-    System.out.println(null == currentUser);
     int oldExp = currentUser.getUserExperience();
     currentUser.updateUserExperience(oldExp + pointsToAdd);
   }

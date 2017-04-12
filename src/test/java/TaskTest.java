@@ -36,6 +36,7 @@ public class TaskTest {
     assertFalse(testTask.getCompleted());
     testTask.markCompleted();
     assertTrue(testTask.getCompleted());
+
   }
 
   @Test
@@ -94,7 +95,7 @@ public class TaskTest {
     Task testTask1 = new Task("Laundry", newDate, 1, 1, 1,1,1,119,1);
     assertEquals(2.0, testTask1.calculateEstimatedTimeMultiplier(testTask1.getEstimated_time()),0.001);
     testTask1 = new Task("Laundry", newDate, 1, 1, 1,1,1,1,1);
-    assertEquals(0.2, testTask1.calculateEstimatedTimeMultiplier(testTask1.getEstimated_time()),0.001);
+    assertEquals(1.0, testTask1.calculateEstimatedTimeMultiplier(testTask1.getEstimated_time()),0.001);
     testTask1 = new Task("Laundry", newDate, 1, 1, 1,1,1,120,1);
     assertEquals(2.0, testTask1.calculateEstimatedTimeMultiplier(testTask1.getEstimated_time()),0.001);
     testTask1 = new Task("Laundry", newDate, 1, 1, 1,1,1,3000,1);

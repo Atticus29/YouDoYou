@@ -17,7 +17,7 @@ public abstract class TodoAbstract {
   public int priority_level;
   public boolean completed;
   public int id;
-  public static final double[] POINT_RANGE = {0.2, 0.4, 0.6, 0.8, 1, 1.2, 1.4, 1.6, 1.8, 2};
+  public static final double[] POINT_RANGE = {1, 1, 1, 1, 1, 1, 1, 1, 2, 2};
   public static final int EST_TIME_CEILING = 120;
 
   public String getName(){
