@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 
 public class TaskList extends TodoAbstract {
   private int number_tasks;
+  private boolean bonusPointsAdded;
 
   public TaskList(String name, int priority_level, Timestamp due, int skill_id, int user_id) {
     this.name = name;
@@ -19,6 +20,7 @@ public class TaskList extends TodoAbstract {
     this.skill_id = skill_id;
     this.user_id = user_id;
     this.number_tasks = 0;
+    this.bonusPointsAdded = false;
     // number_tasks will be incremented upon association of task with tasklist (i.e., the task constructor) TODO
   }
 
@@ -37,11 +39,14 @@ public class TaskList extends TodoAbstract {
   }
 
   public void markCompleted(){
-    if (this.allTasksDone()){
+    if (this.getTasks().size() > 0 && this.allTasksDone()){
       this.completed = true;
-      if(this.number_tasks > 2){
+      if(this.number_tasks > 2 && !this.bonusPointsAdded){
         int bonusPoints = 5 * this.number_tasks;
-        //TODO update experience
+        User currentUser = User.findUser(this.getUser_id());
+        int oldExp = currentUser.getUserExperience();
+        currentUser.updateUserExperience(oldExp + bonusPoints);
+        this.bonusPointsAdded = true;
       }
     }
 

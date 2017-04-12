@@ -112,9 +112,69 @@ public class TaskListTest {
     assertFalse(testTaskList2.allTasksDone());
     testTask.markCompleted();
     testTask.update(testTask.getName(), testTask.getDue(), testTask.getSkill_id(), testTask.getPriority_level(), testTask.getTask_list_id(), testTask.getImportance(), testTask.getCompleted(), testTask.getEstimated_time(), testTask.getDifficulty());
-    System.out.println("Task is completed? " + testTask.getCompleted());
     assertTrue(testTaskList2.allTasksDone());
+  }
 
+  @Test
+  public void markCompleted_onlyWorksIfChildTasksExistAndAreDone_true(){
+    // No tasks
+    testTaskList.markCompleted();
+    assertFalse(testTaskList.getCompleted());
+
+    // Add a task but incomplete
+    User testUser = new User("Jemina");
+    testUser.saveUserToDatabase();
+    Timestamp newDate = Timestamp.valueOf(LocalDateTime.now().plusDays(10));
+    TaskList testTaskList2 = new TaskList("Household Chores", 1, newDate, 1, testUser.getUserId());
+    Task testTask = new Task("Laundry", newDate, testUser.getUserId(), 1, 1,testTaskList2.getId(),1,1,1);
+    testTask.save();
+    testTaskList.markCompleted();
+    assertFalse(testTaskList.getCompleted());
+
+    // Now complete task
+    testTask.markCompleted();
+    testTask.update(testTask.getName(), testTask.getDue(), testTask.getSkill_id(), testTask.getPriority_level(), testTask.getTask_list_id(), testTask.getImportance(), testTask.getCompleted(), testTask.getEstimated_time(), testTask.getDifficulty());
+    testTaskList.markCompleted();
+    assertTrue(testTaskList.getCompleted());
+  }
+
+  @Test
+  public void markCompleted_AddsBonusPointsToUser_true(){
+    User testUser = new User("Jemina");
+    testUser.saveUserToDatabase();
+    Timestamp newDate = Timestamp.valueOf(LocalDateTime.now().plusDays(10));
+    TaskList testTaskList2 = new TaskList("Household Chores", 1, newDate, 1, testUser.getUserId());
+    Task testTask = new Task("Laundry", newDate, testUser.getUserId(), 1, 1,testTaskList2.getId(),1,1,1);
+    testTask.save();
+    testTask.markCompleted();
+    testTask.update(testTask.getName(), testTask.getDue(), testTask.getSkill_id(), testTask.getPriority_level(), testTask.getTask_list_id(), testTask.getImportance(), testTask.getCompleted(), testTask.getEstimated_time(), testTask.getDifficulty());
+    int oldUserExperience = testUser.getUserExperience();
+    testTaskList.markCompleted();
+    int newUserExperience = testUser.getUserExperience();
+    assertTrue(newUserExperience > oldUserExperience);
+  }
+
+  @Test
+  public void markCompleted_onlyAddBonusPointsOnce_true(){
+    // add and comlete first and only task. Mark taskList complete
+    User testUser = new User("Jemina");
+    testUser.saveUserToDatabase();
+    Timestamp newDate = Timestamp.valueOf(LocalDateTime.now().plusDays(10));
+    TaskList testTaskList2 = new TaskList("Household Chores", 1, newDate, 1, testUser.getUserId());
+    Task testTask = new Task("Laundry", newDate, testUser.getUserId(), 1, 1,testTaskList2.getId(),1,1,1);
+    testTask.save();
+    testTask.markCompleted();
+    testTask.update(testTask.getName(), testTask.getDue(), testTask.getSkill_id(), testTask.getPriority_level(), testTask.getTask_list_id(), testTask.getImportance(), testTask.getCompleted(), testTask.getEstimated_time(), testTask.getDifficulty());
+    testTaskList.markCompleted();
+    int oldUserExperience = testUser.getUserExperience();
+
+    // Now add a second task and mark complete. Now try to game the system by getting extra bonus points by marking TaskList complete again
+    Task testTask2 = new Task("Dishes", newDate, testUser.getUserId(), 1, 1,testTaskList2.getId(),1,1,1);
+    testTask2.markCompleted();
+    testTask2.update(testTask2.getName(), testTask2.getDue(), testTask2.getSkill_id(), testTask2.getPriority_level(), testTask2.getTask_list_id(), testTask2.getImportance(), testTask2.getCompleted(), testTask2.getEstimated_time(), testTask2.getDifficulty());
+    testTaskList.markCompleted();
+    int newUserExperience = testUser.getUserExperience();
+    assertEquals(oldUserExperience, newUserExperience);
   }
 
 }
