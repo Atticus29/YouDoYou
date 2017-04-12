@@ -23,8 +23,6 @@ public class TaskListTest {
   @Rule
   public DatabaseRule database = new DatabaseRule();
 
-
-
   @Test
   public void TaskList_instantiatesCorrectly_true(){
     assertTrue(testTaskList instanceof TaskList);
@@ -101,6 +99,22 @@ public class TaskListTest {
     List<Task> allTasks = testTaskList.getTasks();
     assertTrue(allTasks.size() == 2);
     assertTrue(allTasks instanceof List);
+  }
+
+  @Test
+  public void allTasksDone_correctlyDeterminesWhetherAllTasksHaveBeenCompleted_true(){
+    User testUser = new User("Jemina");
+    testUser.saveUserToDatabase();
+    Timestamp newDate = Timestamp.valueOf(LocalDateTime.now().plusDays(10));
+    TaskList testTaskList2 = new TaskList("Household Chores", 1, newDate, 1, testUser.getUserId());
+    Task testTask = new Task("Laundry", newDate, testUser.getUserId(), 1, 1,testTaskList2.getId(),1,1,1);
+    testTask.save();
+    assertFalse(testTaskList2.allTasksDone());
+    testTask.markCompleted();
+    testTask.update(testTask.getName(), testTask.getDue(), testTask.getSkill_id(), testTask.getPriority_level(), testTask.getTask_list_id(), testTask.getImportance(), testTask.getCompleted(), testTask.getEstimated_time(), testTask.getDifficulty());
+    System.out.println("Task is completed? " + testTask.getCompleted());
+    assertTrue(testTaskList2.allTasksDone());
+
   }
 
 }

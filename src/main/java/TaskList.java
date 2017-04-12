@@ -22,11 +22,27 @@ public class TaskList extends TodoAbstract {
     // number_tasks will be incremented upon association of task with tasklist (i.e., the task constructor) TODO
   }
 
+  public boolean allTasksDone(){
+    List<Task> tasksInThisTaskList = this.getTasks();
+    System.out.println("tasksInThisTaskList size is " + tasksInThisTaskList.size());
+    boolean returnVal = true;
+    for(Task task : tasksInThisTaskList){
+      // System.out.println("Got into for loop");
+      if (task.getCompleted() == false){
+        System.out.println("Have an incomplete task for task " + task.getName());
+        returnVal = false;
+      }
+    }
+    return returnVal;
+  }
+
   public void markCompleted(){
-    this.completed = true;
-    if(this.number_tasks > 2){
-      int bonusPoints = 5 * this.number_tasks;
-      //TODO update experience
+    if (this.allTasksDone()){
+      this.completed = true;
+      if(this.number_tasks > 2){
+        int bonusPoints = 5 * this.number_tasks;
+        //TODO update experience
+      }
     }
 
   }
