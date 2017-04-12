@@ -48,12 +48,14 @@ public class UserTest {
    assertEquals(1, User.findUser(testUser.getUserId()).getUserLevel());
    testUser.updateUserExperience(1);
    assertEquals(1, User.findUser(testUser.getUserId()).getUserExperience());
+   testUser.updateUserExperience(299);
+   assertEquals(2, User.findUser(testUser.getUserId()).getUserLevel());
  }
 
  @Test
- public void level_calculatesCorrectly_true() {
-   testUser.updateUserExperience(1000);
-   assertEquals(4, User.findUser(testUser.getUserId()).checkIfLevelUp());
+ public void checkIfLevelUp_calculatesCorrectly_true() {
+   testUser.updateUserExperience(5500);
+   assertEquals(10, User.findUser(testUser.getUserId()).checkIfLevelUp());
  }
 
  @Test
@@ -61,6 +63,18 @@ public class UserTest {
    Skill testSkill = new Skill("Jumping", testUser.getUserId());
    testSkill.saveSkillToDatabase();
    assertEquals(testSkill, User.findUser(testUser.getUserId()).findAllUserSkills().get(0));
+ }
+
+ @Test
+ public void updateUserExperience_LevelsUpUserIfTheyGainALotOfExperience_true(){
+  //  int currentExp = testUser.getUserExperience();
+  //  System.out.println("Current experience is " + currentExp);
+  //  System.out.println("Current level is " + testUser.getUserLevel());
+  //  testUser.updateUserExperience(currentExp + 1000);
+   testUser.updateUserExperience(1000);
+  //  System.out.println("New experience is" + User.findUser(testUser.getUserId()).getUserExperience());
+  //  int newLevel = User.findUser(testUser.getUserId()).checkIfLevelUp();
+  //  System.out.println("New level is" + User.findUser(testUser.getUserId()).getUserLevel());
  }
 
 

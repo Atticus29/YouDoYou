@@ -80,8 +80,9 @@ public class User {
      .addParameter("id", id)
      .addParameter("experience", this.experience + experienceAmount)
      .executeUpdate();
-
-     this.updateUserLevel(this.checkIfLevelUp());
+     this.experience += experienceAmount;
+     int newLevel = this.checkIfLevelUp();
+     this.updateUserLevel(newLevel);
    }
  }
 

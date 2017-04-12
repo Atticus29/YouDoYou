@@ -44,7 +44,6 @@ public class TaskTest {
     assertEquals(0, testUser.getUserExperience());
     testTask.markCompleted();
     assertEquals(10, User.findUser(testUser.getUserId()).getUserExperience());
-
   }
 
   @Test
