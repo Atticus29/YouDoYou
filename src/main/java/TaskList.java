@@ -30,7 +30,7 @@ public class TaskList extends TodoAbstract {
     // number_tasks will be incremented upon association of task with tasklist (i.e., the task constructor) TODO
   }
 
-  public void associateTaskWithSkill(int skill_id){
+  public void associateTaskListWithSkill(int skill_id){
     this.skill_id = skill_id;
     this.updateSilently();
   }

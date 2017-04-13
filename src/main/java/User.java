@@ -27,7 +27,6 @@ public class User {
       Date parsedDate = dateFormat.parse(string);
       Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
       return timestamp;
-      
     }catch(Exception e){
       return null;
     }

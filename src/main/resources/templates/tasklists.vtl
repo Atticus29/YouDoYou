@@ -40,15 +40,23 @@
             <td></td>
             <td>Due:<br><input type="date" name="dueDate" min="2017-04-13" class="form-control" style="width: 80px" required></td>
             <td>Priority:<br><input type="number" name="priority" min="1" max="10" class="form-control" required></td>
-            <td>Assign a Task:
+            <td>Assign a skill:
               <select name="skillId" type="text">
+                <option value="0"></option>
+                #foreach ($skill in $skills)
+                <option value="$skill.getId()">$skill.getName()</option>
+                #end
+              </select>
+            </td>
+            <td>Assign a task:
+              <select name="assignedTaskId" type="text">
                 <option value="0"></option>
                 #foreach ($task in $tasks)
                 <option value="$task.getId()">$task.getName()</option>
                 #end
               </select>
             </td>
-            <td><button type="submit" class="btn btn-success">Add task</button></td>
+            <td><button type="submit" class="btn btn-success">Add task list</button></td>
           </tr>
       </tbody>
     </table>
