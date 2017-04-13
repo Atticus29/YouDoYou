@@ -55,10 +55,8 @@ public class User {
       calcLevelHund = calculatedLevel * 100;
     }
   }
-
     return calculatedLevel;
   }
-
 
   //DB stuff below
 

@@ -13,6 +13,8 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
   private int estimated_time;
   private int importance;
   private int difficulty;
+  public static final int MAX_DIFFICULTY = 10;
+  public static final int MAX_IMPORTANCE = 10;
 
 
 
@@ -21,13 +23,35 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
     this.created = new Timestamp(new Date().getTime()); //TODO
     this.due = due;
     this.user_id = user_id;
-    this.priority_level = priority_level;
+
+    if(priority_level >= MIN_ALL && priority_level <= MAX_PRIORITY){
+      this.priority_level = priority_level;
+    } else{
+      throw new UnsupportedOperationException("Priority out of range");
+    }
+
     this.completed = false;
-    this.importance = importance;
-    this.estimated_time = estimated_time;
-    this.difficulty = difficulty;
-    this.task_list_id = null;
-    this.skill_id = null;
+
+    if(importance >= MIN_ALL && importance <= MAX_IMPORTANCE){
+      this.importance = importance;
+    } else{
+      throw new UnsupportedOperationException("Importance out of range");
+    }
+
+    if(estimated_time >= MIN_ALL){
+      this.estimated_time = estimated_time;
+    } else{
+      throw new UnsupportedOperationException("Estimated time can't be less than 1 minute.");
+    }
+
+    if(difficulty >= MIN_ALL && difficulty <= MAX_DIFFICULTY){
+      this.difficulty = difficulty;
+    }else{
+      throw new UnsupportedOperationException("Difficulty out of range");
+    }
+
+    this.task_list_id = 0;
+    this.skill_id = 0;
   }
 
   public void associateTaskWithSkill(int skill_id){
@@ -42,6 +66,7 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
     TaskList currentTaskList = TaskList.find(task_list_id);
     currentTaskList.setNumber_tasks(currentTaskList.getNumber_tasks() + 1);
     if(!this.getCompleted()){
+      System.out.println("Your task was marked completed. Should now check to see if it can do the same to parent taskList");
       currentTaskList.markIncomplete();
     }
     currentTaskList.updateSilently();
@@ -57,7 +82,7 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
     int oldExp = User.findUser(currentUser.getUserId()).getUserExperience();
     currentUser.updateUserExperience(oldExp + pointsToAdd);
 
-    if(this.task_list_id != null){
+    if(this.task_list_id != 0){
       TaskList associatedTaskList = TaskList.find(this.task_list_id);
       //taskLists's markCompleted will check whether all tasks are done before marking completed
       associatedTaskList.markCompleted();
@@ -110,11 +135,11 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
 
   public String getAssociatedSkillName() {
     try {
-     Skill.find(this.skill_id).getName();
+     Skill.findSkill(this.skill_id).getSkillName();
    } catch (NullPointerException exception) {
      return "";
    }
-   return Skill.find(this.skill_id).getName();
+   return Skill.findSkill(this.skill_id).getSkillName();
   }
 
   public static Task find(int id) {
