@@ -41,6 +41,13 @@ public class TaskListTest {
   }
 
   @Test
+  public void setNumber_tasks_changesNumberTasksTo5_true(){
+    System.out.println("originally, it is: " + testTaskList.getNumber_tasks());
+    testTaskList.setNumber_tasks(5);
+    assertEquals(5, testTaskList.getNumber_tasks());
+  }
+
+  @Test
   public void markCompleted_marksATaskListTrueForCompleted_true(){
     assertFalse(testTaskList.getCompleted());
     testTask.markCompleted();
@@ -92,15 +99,16 @@ public class TaskListTest {
   }
 
   @Test
-  public void update_changesNameDueSkillPriorityTaskListListImportanceEstTimeDifficulty_true(){
+  public void update_changesNameDueSkillPriorityTaskListListImportanceEstTimeDifficultyNumberTasks_true(){
     Timestamp changeDate = Timestamp.valueOf(LocalDateTime.now().plusDays(20));
     assertFalse(TaskList.find(testTaskList.getId()).getCompleted());
-    testTaskList.update("Kitchen chores", changeDate, 2, 2, true, testTaskList.getNumber_tasks());
+    testTaskList.update("Kitchen chores", changeDate, 2, 2, true, 4);
     assertEquals("Kitchen chores",TaskList.find(testTaskList.getId()).getName());
     assertEquals(changeDate,TaskList.find(testTaskList.getId()).getDue());
     assertEquals(2,TaskList.find(testTaskList.getId()).getSkill_id());
     assertEquals(2,TaskList.find(testTaskList.getId()).getPriority_level());
     assertTrue(TaskList.find(testTaskList.getId()).getCompleted());
+    assertEquals(4,TaskList.find(testTaskList.getId()).getNumber_tasks());
   }
 
   @Test

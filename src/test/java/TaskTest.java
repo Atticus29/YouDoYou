@@ -62,8 +62,10 @@ public class TaskTest {
     testTaskList.save();
     assertEquals(0, testTaskList.getNumber_tasks());
     int testTaskListId = testTaskList.getId();
+    // System.out.println("number of tasks before is: ");
     testTask.associateTaskWithTaskList(testTaskListId);
-    assertEquals(1, testTaskList.getNumber_tasks());
+    TaskList currentTaskList = TaskList.find(testTaskListId);
+    assertEquals(1, currentTaskList.getNumber_tasks());
   }
 
   // @Test
@@ -115,6 +117,7 @@ public class TaskTest {
     assertTrue(Task.find(testTask.getId()).getCompleted());
     assertEquals(1000,Task.find(testTask.getId()).getEstimated_time());
     assertEquals(2,Task.find(testTask.getId()).getDifficulty());
+    // assertEquals(2,Task.find(testTask.getId()).getNumber_tasks());
   }
 
   @Test
