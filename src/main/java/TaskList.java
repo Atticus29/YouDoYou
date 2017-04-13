@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 
 public class TaskList extends TodoAbstract {
   private int number_tasks;
+  private boolean bonusPointsAdded;
 
   public TaskList(String name, int priority_level, Timestamp due, int skill_id, int user_id) {
     this.name = name;
@@ -19,7 +20,45 @@ public class TaskList extends TodoAbstract {
     this.skill_id = skill_id;
     this.user_id = user_id;
     this.number_tasks = 0;
+    this.bonusPointsAdded = false;
     // number_tasks will be incremented upon association of task with tasklist (i.e., the task constructor) TODO
+  }
+
+  public boolean getBonusPointsAdded(){
+    return this.bonusPointsAdded;
+  }
+
+  public boolean allTasksDone(){
+    List<Task> tasksInThisTaskList = this.getTasks();
+    boolean returnVal = true;
+    for(Task task : tasksInThisTaskList){
+      if (task.getCompleted() == false){
+        returnVal = false;
+      }
+    }
+    return returnVal;
+  }
+
+  public void markIncomplete(){
+    this.completed = false;
+    this.updateSilently();
+  }
+
+  public void markCompleted(){
+    if (this.getTasks().size() > 0 && this.allTasksDone()){
+      this.completed = true;
+      //TODO find out why number_tasks isn't incrementing. For now, a workaround
+      if(this.getTasks().size() > 2 && !this.bonusPointsAdded){
+        int bonusPoints = 5 * this.getTasks().size();
+        System.out.println("bonusPoints is: " + bonusPoints);
+        User currentUser = User.findUser(this.getUser_id());
+        int oldExp = currentUser.getUserExperience();
+        currentUser.updateUserExperience(oldExp + bonusPoints);
+        this.bonusPointsAdded = true;
+      }
+      this.updateSilently();
+    }
+
   }
 
   public int getNumber_tasks(){
@@ -31,7 +70,7 @@ public class TaskList extends TodoAbstract {
   }
 
   public static TaskList find(int id) {
-    try(Connection con = DB.sql2o.open()) {
+    try(Connection con = DB.sql2o.open()){
       String sql = "SELECT * FROM task_lists WHERE id=:id ;";
       TaskList TaskList = con.createQuery(sql)
       .throwOnMappingFailure(false)
@@ -85,9 +124,9 @@ public class TaskList extends TodoAbstract {
     }
   }
 
-  public void update(String name, Timestamp due, int skill_id, int priority_level, boolean completed) {
+  public void update(String name, Timestamp due, int skill_id, int priority_level, boolean completed, int number_tasks) {
     try(Connection con = DB.sql2o.open()) {
-      String sql = "UPDATE task_lists SET name=:name, due=:due, skill_id=:skill_id, priority_level=:priority_level, completed=:completed WHERE id=:id;";
+      String sql = "UPDATE task_lists SET name=:name, due=:due, skill_id=:skill_id, priority_level=:priority_level, completed=:completed, number_tasks=:number_tasks WHERE id=:id;";
       con.createQuery(sql)
       .addParameter("id", this.id)
       .addParameter("name", name)
@@ -95,6 +134,7 @@ public class TaskList extends TodoAbstract {
       .addParameter("skill_id", skill_id)
       .addParameter("priority_level", priority_level)
       .addParameter("completed", completed)
+      .addParameter("number_tasks", number_tasks)
       .executeUpdate();
     }
   }
@@ -103,12 +143,14 @@ public class TaskList extends TodoAbstract {
     String sqlQuery = "SELECT * FROM tasks WHERE task_list_id=:task_list_id;";
     try(Connection con=DB.sql2o.open()){
       List<Task> results = con.createQuery(sqlQuery)
-        .addParameter("task_list_id", this.id)
-        .executeAndFetch(Task.class);
+      .addParameter("task_list_id", this.id)
+      .executeAndFetch(Task.class);
       return results;
     }
   }
 
-
+  public void updateSilently(){
+    this.update(this.name, this.due, this.skill_id, this.priority_level, this.completed, this.number_tasks);
+  }
 
 }

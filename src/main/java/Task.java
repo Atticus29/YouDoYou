@@ -14,18 +14,71 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
   private int importance;
   private int difficulty;
 
-  public Task(String name, Timestamp due, int user_id, int skill_id, int priority_level, int importance, int estimated_time, int difficulty) {
+
+
+  public Task(String name, Timestamp due, int user_id, int priority_level, int importance, int estimated_time, int difficulty) {
     this.name = name;
     this.created = new Timestamp(new Date().getTime()); //TODO
     this.due = due;
     this.user_id = user_id;
-    this.skill_id = skill_id;
     this.priority_level = priority_level;
     this.completed = false;
-    // this.task_list_id = task_list_id;
     this.importance = importance;
     this.estimated_time = estimated_time;
     this.difficulty = difficulty;
+    this.task_list_id = null;
+    this.skill_id = null;
+  }
+
+  public void associateTaskWithSkill(int skill_id){
+    this.skill_id = skill_id;
+    this.updateSilently();
+  }
+
+  // Note: will also add 1 to associatedTaskList's number_tasks
+  public void associateTaskWithTaskList(int task_list_id){
+    this.task_list_id = task_list_id;
+    this.updateSilently();
+    TaskList currentTaskList = TaskList.find(task_list_id);
+    currentTaskList.setNumber_tasks(currentTaskList.getNumber_tasks() + 1);
+    if(!this.getCompleted()){
+      currentTaskList.markIncomplete();
+    }
+    currentTaskList.updateSilently();
+  }
+
+  public void markCompleted(){
+    this.completed = true;
+    this.updateSilently();
+
+    int pointsToAdd = (int)(10 * Task.POINT_RANGE[this.importance-1]* Task.POINT_RANGE[this.difficulty-1]* calculateEstimatedTimeMultiplier(this.estimated_time));
+
+    User currentUser = User.findUser(this.user_id);
+    int oldExp = User.findUser(currentUser.getUserId()).getUserExperience();
+    currentUser.updateUserExperience(oldExp + pointsToAdd);
+
+    if(this.task_list_id != null){
+      TaskList associatedTaskList = TaskList.find(this.task_list_id);
+      //taskLists's markCompleted will check whether all tasks are done before marking completed
+      associatedTaskList.markCompleted();
+    }
+  }
+
+
+  public double calculateEstimatedTimeMultiplier(double minutes){
+    if(minutes <1){
+      throw new UnsupportedOperationException("Inappropriate number of minutes (less than 1)");
+    }
+    if(minutes == 1){
+      return Task.POINT_RANGE[0];
+    } else if(minutes > Task.EST_TIME_CEILING){
+      return Task.POINT_RANGE[Task.POINT_RANGE.length-1];
+    }
+    else{
+      double incrementor = (Task.EST_TIME_CEILING - 1.0)/9.0;
+      int elementIndexToGet = (int) Math.floor(minutes/incrementor);
+      return Task.POINT_RANGE[elementIndexToGet];
+    }
   }
 
   public int getImportance(){
@@ -137,5 +190,11 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
       .executeUpdate();
     }
   }
+
+
+  public void updateSilently(){
+    this.update(this.name, this.due, this.skill_id, this.priority_level, this.task_list_id, this.importance, this.completed, this.estimated_time, this.difficulty);
+  }
+
 
 }

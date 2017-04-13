@@ -17,10 +17,8 @@ public abstract class TodoAbstract {
   public int priority_level;
   public boolean completed;
   public int id;
-
-  public void markCompleted(){
-    this.completed = true;
-  }
+  public static final double[] POINT_RANGE = {1, 1, 1, 1, 1, 1, 1, 1, 2, 2};
+  public static final int EST_TIME_CEILING = 120;
 
   public String getName(){
     return this.name;
