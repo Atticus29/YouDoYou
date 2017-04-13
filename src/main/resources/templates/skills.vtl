@@ -1,0 +1,41 @@
+<!-- begin skills.vtl -->
+
+<link rel="stylesheet" href="/css/table.css">
+<script type="text/javascript" src="/js/table.js">
+
+</script>
+<section>
+  <!--for demo wrap-->
+  <h1>Fixed Table header</h1>
+  <div class="tbl-header">
+    <table cellpadding="0" cellspacing="0" border="0">
+      <thead>
+        <tr>
+          <th>Skill</th>
+          <th>Created</th>
+          <th>Level</th>
+          <th>Experience</th>
+          <th>Number of tasks completed</th>
+        </tr>
+      </thead>
+    </table>
+  </div>
+  <div class="tbl-content">
+    <table cellpadding="0" cellspacing="0" border="0">
+      <tbody>
+        #foreach ($skill in $skills)
+        <tr>
+          <td><a href="/skills/$skill.getId()">$skill.getSkillName()</a></td>
+          <td>$skill.getSkillCreated()</td>
+          <td>$skill.getSkillLevel()</td>
+          <td>$skill.getSkillExperience()</td>
+          <td>Some number</td>
+        </tr>
+        #end
+      </tbody>
+    </table>
+  </div>
+</section>
+
+
+<!-- end skills.vtl -->

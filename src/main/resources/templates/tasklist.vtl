@@ -1,0 +1,54 @@
+<!-- begin tasklist.vtl -->
+<div class="row">
+<div class="col-md-2">
+  <!-- alignment -->
+</div>
+
+<div class="center col-md-6">
+<h2>$tasklist.getName()</h2>
+<br>
+<h4>Created on: $tasklist.getCreated()</h4>
+<br>
+<h4>Due: $tasklist.getDue()</h4> <!-- TODO: change this and getcreated to a new method that parses info into readable dates -->
+<br>
+<h4>Number of tasks in this list: $tasklist.getNumber_tasks()</h4>
+</div>
+
+<div class="col-md-2">
+  <!-- alignment -->
+</div>
+</div>
+
+<div class="row">
+  <section>
+    <!--for demo wrap-->
+    <h1>Fixed Table header</h1>
+    <div class="tbl-header">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <thead>
+          <tr>
+            <th>Task</th>
+            <th>Created</th>
+            <th>Due</th>
+            <th>Experience</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+    <div class="tbl-content">
+      <table cellpadding="0" cellspacing="0" border="0">
+        <tbody>
+          #foreach ($task in $tasklist.getTasks())
+          <tr>
+            <td><a href="/tasks/$task.getId()">$task.getName()</a></td>
+            <td>$task.getCreated()</td>
+            <td>$task.getDue()</td>
+            <td>Some experience</td>
+          </tr>
+          #end
+        </tbody>
+      </table>
+    </div>
+  </section>
+</div>
+<!-- end tasklist.vtl -->

@@ -10,17 +10,13 @@
 <br>
 <h4>Due: $task.getDue()</h4> <!-- TODO: change this and getcreated to a new method that parses info into readable dates -->
 <br>
-<h4>Task list: <a href="/tasklists/$task.getTask_list_id()">$task.getAssociatedTaskListName()</a>
+<h4>Task list: <a href="/tasklists/$task.getTask_list_id()">$task.getAssociatedTaskListName()</a></h4>
+<br>
+<h4>Task skill: <a href="/skills/$task.getSkill_id()"></a>$task.getAssociatedSkillName()</h4>
+
 </div>
 
 <div class="col-md-2">
   <!-- alignment -->
 </div>
 <!-- end task.vtl -->
-
-
-<!-- <td><a href="/tasks/$task.getId()">$task.getName()</a></td>
-<td>$task.getCreated()</td>
-<td>$task.getDue()</td>
-<td>$task.getAssociatedTaskListName()</td>
-<td>Some experience</td> -->
