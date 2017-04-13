@@ -42,21 +42,24 @@
         #end
         <form action="/tasks/new" method="post">
           <tr>
-            <td><input id="name" name="name" type="text" class="form-control" value="Task name" required></td>
-            <td><input type="date" name="dueDate" min="2017-04-13" class="form-control" required></td>
-            <td><input type="number" name="priority" min="1" max="10" class="form-control" required></td>
-            <td>Est. time in minutes:<input type="number" name="estimatedTime" min="1" class="form-control" required></td>
-            <td><input type="number" name="difficulty" min="1" max="10" class="form-control" required></td>
-            <td><input type="number" name="importance" min="1" max="10" class="form-control" required></td>
-            <td>
-              <select name="taskListName" type="text">
+            <td>Task name:<input id="name" name="name" type="text" class="form-control" value="Task name" style="width: 120px" required></td>
+            <td></td>
+            <td>Due:<br><input type="date" name="dueDate" min="2017-04-13" class="form-control" style="width: 80px" required></td>
+            <td>Priority:<br><input type="number" name="priority" min="1" max="10" class="form-control" required></td>
+            <td>Est. time in minutes:<input type="number" name="estimatedTime" min="1" class="form-control" style="width: 50px" required></td>
+            <td>Difficulty:<input type="number" name="difficulty" min="1" max="10" class="form-control" required></td>
+            <td>Importance<input type="number" name="importance" min="1" max="10" class="form-control" required></td>
+            <td>Assign to task list:
+              <select name="taskListId" type="text">
+                <option value="0"></option>
                 #foreach ($tasklist in $tasklists)
                 <option value="$tasklist.getId()">$tasklist.getName()</option>
                 #end
               </select>
             </td>
-            <td>
-              <select name="skillName" type="text">
+            <td>Assign to skill:
+              <select name="skillId" type="text">
+                <option value="0"></option>
                 #foreach ($skill in $skills)
                 <option value="$skill.getId()">$skill.getName()</option>
                 #end
@@ -69,17 +72,3 @@
     </table>
   </div>
 </section>
-
-
-<!-- <form action="/clients/new" method="post">
-<td><input id="name" name="name" type="text" class="form-control" value="client name" required></td>
-<td><input type="date" name="appointmentDate" min="2017-04-01" class="form-control" required><br></td>
-<td><input type="time" name="appointmentTime" min="11:00" max="20:00" step="900" class="form-control" required></td>
-<td><select name="stylistName" type="text" required>
-#foreach ($stylist in $stylists)
-<option value="$stylist.getStylistId()">$stylist.getStylistName()</option>
-#end
-</select>
-</td>
-<td><button type="submit" class="btn btn-success">Add client</button></td>
-</form> -->
