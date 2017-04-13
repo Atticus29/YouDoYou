@@ -14,7 +14,13 @@ public class TaskList extends TodoAbstract {
 
   public TaskList(String name, int priority_level, Timestamp due, int skill_id, int user_id) {
     this.name = name;
-    this.priority_level = priority_level;
+
+    if(priority_level >= MIN_ALL && priority_level <= MAX_PRIORITY){
+      this.priority_level = priority_level;
+    } else{
+      throw new UnsupportedOperationException("Priority out of range");
+    }
+
     this.due = due;
     this.completed = false;
     this.skill_id = skill_id;

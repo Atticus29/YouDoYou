@@ -13,6 +13,8 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
   private int estimated_time;
   private int importance;
   private int difficulty;
+  public static final int MAX_DIFFICULTY = 10;
+  public static final int MAX_IMPORTANCE = 10;
 
 
   public Task(String name, Timestamp due, int user_id, int priority_level, int importance, int estimated_time, int difficulty) {
@@ -20,13 +22,35 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
     this.created = new Timestamp(new Date().getTime()); //TODO
     this.due = due;
     this.user_id = user_id;
-    this.priority_level = priority_level;
+
+    if(priority_level >= MIN_ALL && priority_level <= MAX_PRIORITY){
+      this.priority_level = priority_level;
+    } else{
+      throw new UnsupportedOperationException("Priority out of range");
+    }
+
     this.completed = false;
-    this.importance = importance;
-    this.estimated_time = estimated_time;
-    this.difficulty = difficulty;
-    this.task_list_id = null;
-    this.skill_id = null;
+
+    if(importance >= MIN_ALL && importance <= MAX_IMPORTANCE){
+      this.importance = importance;
+    } else{
+      throw new UnsupportedOperationException("Importance out of range");
+    }
+
+    if(estimated_time >= MIN_ALL){
+      this.estimated_time = estimated_time;
+    } else{
+      throw new UnsupportedOperationException("Estimated time can't be less than 1 minute.");
+    }
+
+    if(difficulty >= MIN_ALL && difficulty <= MAX_DIFFICULTY){
+      this.difficulty = difficulty;
+    }else{
+      throw new UnsupportedOperationException("Difficulty out of range");
+    }
+
+    this.task_list_id = 0;
+    this.skill_id = 0;
   }
 
   public void associateTaskWithSkill(int skill_id){
@@ -56,7 +80,7 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
     int oldExp = User.findUser(currentUser.getUserId()).getUserExperience();
     currentUser.updateUserExperience(oldExp + pointsToAdd);
 
-    if(this.task_list_id != null){
+    if(this.task_list_id != 0){
       TaskList associatedTaskList = TaskList.find(this.task_list_id);
       //taskLists's markCompleted will check whether all tasks are done before marking completed
       associatedTaskList.markCompleted();

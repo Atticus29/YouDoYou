@@ -131,4 +131,39 @@ public class TaskTest {
     assertEquals(2, testTask1.calculateEstimatedTimeMultiplier(testTask1.getEstimated_time()),0.001);
   }
 
+  @Test (expected = UnsupportedOperationException.class)
+  public void importance_cannotBeAssignedBadNumbersTooLow_true(){
+    Task testTask1 = new Task("Laundry", newDate, 3, 1, -1,1,1);
+  }
+
+  @Test (expected = UnsupportedOperationException.class)
+  public void importance_cannotBeAssignedBadNumbersTooHigh_true(){
+    Task testTask2 = new Task("Laundry", newDate, 3, 1, 11,1,1);
+  }
+
+  @Test (expected = UnsupportedOperationException.class)
+  public void DIFFICULTY_cannotBeAssignedBadNumbersTooLow_true(){
+    Task testTask1 = new Task("Laundry", newDate, 3, 1, 1,1,-1);
+  }
+
+  @Test (expected = UnsupportedOperationException.class)
+  public void DIFFICULTY_cannotBeAssignedBadNumbersTooHigh_true(){
+    Task testTask2 = new Task("Laundry", newDate, 3, 1, 1,1,11);
+  }
+
+  @Test (expected = UnsupportedOperationException.class)
+  public void PRIORITY_cannotBeAssignedBadNumbersTooLow_true(){
+    Task testTask1 = new Task("Laundry", newDate, 3, -1, 1,1,1);
+  }
+
+  @Test (expected = UnsupportedOperationException.class)
+  public void PRIORITY_cannotBeAssignedBadNumbersTooHigh_true(){
+    Task testTask2 = new Task("Laundry", newDate, 3, 11, 1,1,1);
+  }
+
+  @Test (expected = UnsupportedOperationException.class)
+  public void estimatedTime_cannotBeAssignedBadNumbersTooLow_true(){
+    Task testTask1 = new Task("Laundry", newDate, 3, 1, 1,-1,1);
+  }
+
 }

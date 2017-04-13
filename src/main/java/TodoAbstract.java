@@ -19,6 +19,8 @@ public abstract class TodoAbstract {
   public int id;
   public static final double[] POINT_RANGE = {1, 1, 1, 1, 1, 1, 1, 1, 2, 2};
   public static final int EST_TIME_CEILING = 120;
+  public static final int MAX_PRIORITY = 10;
+  public static final int MIN_ALL = 1;
 
   public String getName(){
     return this.name;

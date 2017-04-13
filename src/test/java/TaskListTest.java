@@ -257,4 +257,14 @@ public class TaskListTest {
     assertTrue(expAfterTask4 == (finalExperience));
   }
 
+  @Test (expected = UnsupportedOperationException.class)
+  public void PRIORITY_cannotBeAssignedBadNumbersTooLow_true(){
+    TaskList testTaskList1 = new TaskList("Yard",-1, newDate, 3, 2);
+  }
+
+  @Test (expected = UnsupportedOperationException.class)
+  public void PRIORITY_cannotBeAssignedBadNumbersTooHigh_true(){
+    TaskList testTaskList1 = new TaskList("Yard",11, newDate, 3, 2);
+  }
+
 }
