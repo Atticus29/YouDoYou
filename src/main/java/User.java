@@ -21,6 +21,11 @@ public class User {
     this.experience = 0;
   }
 
+
+  public String getCreatedAsString(){
+    return this.created.toGMTString();
+  }
+
   public static Timestamp convertStringToTimestamp(String string) {
     try{
       SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
@@ -149,5 +154,24 @@ public class User {
     }
   }
 
+  public static List<User> all(){
+    String sqlQuery = "SELECT * FROM users;";
+    try(Connection con=DB.sql2o.open()){
+      List<User> results = con.createQuery(sqlQuery)
+      .executeAndFetch(User.class);
+      return results;
+    }
+  }
+
+  public static User findUserByName(String name) {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT * FROM users WHERE name = :name";
+      User user = con.createQuery(sql)
+      .addParameter("name", name)
+      .throwOnMappingFailure(false)
+      .executeAndFetchFirst(User.class);
+      return user;
+    }
+  }
 
 }
