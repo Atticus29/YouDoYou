@@ -67,6 +67,7 @@ public class Skill {
 
   //DB stuff below
 
+  // TODO: add a getAllTasks
   public static List<Skill> getAllSkills() {
     try(Connection con = DB.sql2o.open()) {
       String sql = "SELECT * FROM skills";
