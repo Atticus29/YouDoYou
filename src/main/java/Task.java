@@ -169,7 +169,7 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
 
   public void save() {
     try(Connection con = DB.sql2o.open()) {
-      String sql = "INSERT INTO tasks (name, created, due, difficulty, estimated_time, importance, completed, priority_level, skill_id, task_list_id, user_id) VALUES (:name, now(), :due, :difficulty, :estimated_time, :importance, :completed, :priority_level, :skill_id, :task_list_id, :user_id);";
+      String sql = "INSERT INTO tasks (name, created, due, difficulty, estimated_time, importance, completed, priority_level, skill_id, task_list_id, user_id) VALUES (:name, now(), CAST(:due AS DATE), :difficulty, :estimated_time, :importance, :completed, :priority_level, :skill_id, :task_list_id, :user_id);";
       this.id = (int) con.createQuery(sql, true)
       .addParameter("name", this.name)
       .addParameter("due", this.due)

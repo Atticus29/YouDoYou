@@ -41,6 +41,23 @@ public class App {
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 
+    post("/tasks/new", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      String name = request.queryParams("name");
+      Timestamp dueDate = User.convertStringToTimestamp(request.queryParams("dueDate"));
+      int priority = request.queryParams("priority");
+      int estimatedTime = Integer.parseInt(request.queryParams("estimatedTime"));
+      int difficulty = Integer.parseInt(request.queryParams("difficulty"));
+      int importance = Integer.parseInt(request.queryParams("importance"));
+      int taskListId = Integer.parseInt(request.queryParams("taskListId"));
+      int skillId = Integer.parseInt(request.queryParams("skillId"));
+      Task newTask = new Task(name, dueDate, User.all().get(0), priority, importance, estimatedTime, difficulty);
+      newTask.save();
+      newTask.associateTaskWithSkill(skillId);
+      newTask.associateTaskWithTaskList(taskListId);
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
     get("/tasklists", (request, response) -> {
       Map<String, Object> model = new HashMap<String, Object>();
       model.put("template", "templates/tasklists.vtl");
@@ -83,11 +100,12 @@ public class App {
 
     get("/user/:id", (request, response) -> {
       Map<String, Object> model = new HashMap<String, Object>();
-      User user = User.find(Integer.parseInt(request.params("id")));
+      User user = User.findUser(Integer.parseInt(request.params("id")));
       model.put("user", user);
       model.put("tasks", Task.all());
       model.put("tasklists", TaskList.all());
       model.put("skills", Skill.getAllSkills());
+      return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 
   }
