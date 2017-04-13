@@ -17,7 +17,7 @@ public class App {
 
     // Create a dummy user
     User dummy = new User("Jehosephat");
-    // dummy.saveUserToDatabase();
+    dummy.saveUserToDatabase();
 
     get("/", (request, response) -> {
       Map<String, Object> model = new HashMap<String, Object>();
@@ -63,7 +63,8 @@ public class App {
       int importance = Integer.parseInt(request.queryParams("importance"));
       int taskListId = Integer.parseInt(request.queryParams("taskListId"));
       int skillId = Integer.parseInt(request.queryParams("skillId"));
-      Task newTask = new Task(name, dueDate, dummy.getUserId(), priority, importance, estimatedTime, difficulty); // TODO: change that dummy to user.all().get(0)
+      int userId = Integer.parseInt(request.queryParams("userId"));
+      Task newTask = new Task(name, dueDate, userId, priority, importance, estimatedTime, difficulty); // TODO: change that dummy to user.all().get(0)
       newTask.save();
       if (skillId != 0) {newTask.associateTaskWithSkill(skillId);}
       if (taskListId != 0) {newTask.associateTaskWithTaskList(taskListId);}
