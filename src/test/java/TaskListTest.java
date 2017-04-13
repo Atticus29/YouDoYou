@@ -50,18 +50,11 @@ public class TaskListTest {
   @Test
   public void allTasksDone_shouldBeTrueWhenTasksCompletedAndNotTrueWhenANewTaskIsAssociated_true(){
     assertFalse(testTaskList.allTasksDone());
-    // List<Task> allTasks = testTaskList.getTasks();
-    // for(Task task : allTasks){
-    //   System.out.println("task is completed?: " + task.getCompleted());
-    // }
     testTask.markCompleted();
-    // allTasks = testTaskList.getTasks();
-    // for(Task task : allTasks){
-    //   System.out.println("task is completed after marking?: " + task.getCompleted());
-    // }
     assertTrue(testTaskList.allTasksDone());
     Task testTask2 = new Task("Make bed", newDate, testUser.getUserId(), 1, 1,1,1);
     testTask2.associateTaskWithTaskList(testTaskList.getId());
+    testTask2.save();
     List<Task> allTasks = testTaskList.getTasks();
     for(Task task : allTasks){
       System.out.println("task is completed?: " + task.getCompleted());
