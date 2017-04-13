@@ -1,0 +1,25 @@
+<!-- begin layout.vtl -->
+<body>
+  <link rel="stylesheet" href="/css/drawer.css">
+   <input type="checkbox" id="drawer-toggle" name="drawer-toggle"/>
+   <label for="drawer-toggle" id="drawer-toggle-label"></label>
+   <header>You Do You</header>
+   <nav id="drawer">
+      <ul>
+         <li><a href="/player">Player Info</a></li>
+         <li><a href="/tasks">All tasks</a></li>
+         <li><a href="/duetoday">Due today</a></li>
+         <li><a href="/calendar">Calendar of tasks</a></li>
+      </ul>
+   </nav>
+   <div id="page-content">
+     <div class="container">
+       #parse( $template )
+     </div>
+   </div>
+</body>
+
+
+
+
+<!-- end layout.vtl -->

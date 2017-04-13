@@ -116,7 +116,6 @@ public class TaskTest {
     assertTrue(Task.find(testTask.getId()).getCompleted());
     assertEquals(1000,Task.find(testTask.getId()).getEstimated_time());
     assertEquals(2,Task.find(testTask.getId()).getDifficulty());
-    // assertEquals(2,Task.find(testTask.getId()).getNumber_tasks());
   }
 
   @Test

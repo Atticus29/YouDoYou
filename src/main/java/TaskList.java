@@ -50,24 +50,16 @@ public class TaskList extends TodoAbstract {
       //TODO find out why number_tasks isn't incrementing. For now, a workaround
       if(this.getTasks().size() > 2 && !this.bonusPointsAdded){
         int bonusPoints = 5 * this.getTasks().size();
-        // System.out.println("user id is " + this.getUser_id());
         System.out.println("bonusPoints is: " + bonusPoints);
         User currentUser = User.findUser(this.getUser_id());
         int oldExp = currentUser.getUserExperience();
-        // System.out.println("oldExp is" + oldExp);
-        // System.out.println("is null " + oldExp==null);
         currentUser.updateUserExperience(oldExp + bonusPoints);
         this.bonusPointsAdded = true;
       }
       this.updateSilently();
-      // TaskList updatedTL = find(this.getId());
-      // updatedTL.updateSilently();
-      // updatedTL. update(updatedTL.getName(), updatedTL.getDue(), updatedTL.getSkill_id(), updatedTL.getPriority_level(), updatedTL.getCompleted(), updatedTL.getNumber_tasks());
-      // this.update(this.name, this.due, this.skill_id, this.priority_level, this.completed, this.number_tasks);
     }
 
   }
-
 
   public int getNumber_tasks(){
     return this.number_tasks;
@@ -78,7 +70,7 @@ public class TaskList extends TodoAbstract {
   }
 
   public static TaskList find(int id) {
-    try(Connection con = DB.sql2o.open()) {
+    try(Connection con = DB.sql2o.open()){
       String sql = "SELECT * FROM task_lists WHERE id=:id ;";
       TaskList TaskList = con.createQuery(sql)
       .throwOnMappingFailure(false)
@@ -160,7 +152,5 @@ public class TaskList extends TodoAbstract {
   public void updateSilently(){
     this.update(this.name, this.due, this.skill_id, this.priority_level, this.completed, this.number_tasks);
   }
-
-
 
 }
