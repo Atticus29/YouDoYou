@@ -24,8 +24,8 @@
         #foreach ($task in $tasks)
         <tr>
           <td><a href="/tasks/$task.getId()">$task.getName()</a></td>
-          <td>$task.getCreated()</td>
-          <td>$task.getDue()</td>
+          <td>$task.getReadableCreated()</td>
+          <td>$task.getReadableDue()</td>
           <td>$task.getAssociatedTaskListName()</td>
           <td>Some experience</td>
         </tr>
