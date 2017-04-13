@@ -4,23 +4,34 @@
 </head>
 <body>
   <link rel="stylesheet" href="/css/drawer.css">
-   <input type="checkbox" id="drawer-toggle" name="drawer-toggle"/>
-   <label for="drawer-toggle" id="drawer-toggle-label"></label>
-   <header>You Do You</header>
-   <nav id="drawer">
-      <ul>
-        <!-- TODO don't hardcode this -->
-         <li><a href="/player/Jehosephat">Player Info</a></li>
-         <li><a href="/tasks">All tasks</a></li>
-         <li><a href="/duetoday">Due today</a></li>
-         <li><a href="/calendar">Calendar of tasks</a></li>
-      </ul>
-   </nav>
-   <div id="page-content">
-     <div class="container">
-       #parse( $template )
-     </div>
-   </div>
+  <input type="checkbox" id="drawer-toggle" name="drawer-toggle"/>
+  <label for="drawer-toggle" id="drawer-toggle-label"></label>
+  <header>You Do You</header>
+  <nav id="drawer">
+    <ul>
+      <!-- TODO don't hardcode this -->
+      <li><a href="/player/Jehosephat">Player Info</a></li>
+      <li><a href="/tasks">All tasks</a></li>
+      <li><a href="/duetoday">Due today</a></li>
+      <li><a href="/calendar">Calendar of tasks</a></li>
+    </ul>
+  </nav>
+  <div id="page-content">
+    <div class="container">
+      #parse( $template )
+      <div class="footer">
+        <div id="button"></div>
+        <div id="container">
+          <div id="cont">
+            <div class="footer_center">
+              <h3>Level: $user.getUserLevel()</h3>
+              <h3>Exp: $user.getUserExperience()</h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </body>
 
 
