@@ -39,23 +39,18 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
     TaskList currentTaskList = TaskList.find(task_list_id);
     currentTaskList.setNumber_tasks(currentTaskList.getNumber_tasks() + 1);
     if(!this.getCompleted()){
-      System.out.println("task " + this.name + " is not complete");
       currentTaskList.markIncomplete();
     }
     currentTaskList.updateSilently();
-    // (currentTaskList.getName(), currentTaskList.getDue(), currentTaskList.getSkill_id(), currentTaskList.getPriority_level(), currentTaskList.getCompleted(), currentTaskList.getNumber_tasks());
-
   }
 
   public void markCompleted(){
-    // Update property
     this.completed = true;
-    this.update(this.name, this.due, this.skill_id, this.priority_level, this.task_list_id, this.importance, this.completed, this.estimated_time, this.difficulty);
+    this.updateSilently();
 
     int pointsToAdd = (int)(10 * Task.POINT_RANGE[this.importance-1]* Task.POINT_RANGE[this.difficulty-1]* calculateEstimatedTimeMultiplier(this.estimated_time));
 
     User currentUser = User.findUser(this.user_id);
-    System.out.println("should be true: " + (currentUser instanceof User));
     int oldExp = User.findUser(currentUser.getUserId()).getUserExperience();
     currentUser.updateUserExperience(oldExp + pointsToAdd);
   }

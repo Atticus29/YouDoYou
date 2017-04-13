@@ -55,13 +55,7 @@ public class TaskListTest {
     Task testTask2 = new Task("Make bed", newDate, testUser.getUserId(), 1, 1,1,1);
     testTask2.associateTaskWithTaskList(testTaskList.getId());
     testTask2.save();
-    List<Task> allTasks = testTaskList.getTasks();
-    for(Task task : allTasks){
-      System.out.println("task is completed?: " + task.getCompleted());
-    }
     assertFalse(testTaskList.allTasksDone());
-    //TODO associate another task and assertFalse again
-
   }
 
   @Test
@@ -209,31 +203,58 @@ public class TaskListTest {
   @Test
   public void markCompleted_onlyAddBonusPointsOnce_true(){
     // add and complete first and only task. Mark taskList complete
+    int originalUserExperience = User.findUser(testUser.getUserId()).getUserExperience();
+    System.out.println("Original user experience is: " + originalUserExperience);
+
     testTask.markCompleted();
-    testTask.update(testTask.getName(), testTask.getDue(), testTask.getSkill_id(), testTask.getPriority_level(), testTask.getTask_list_id(), testTask.getImportance(), testTask.getCompleted(), testTask.getEstimated_time(), testTask.getDifficulty());
+    testTask.updateSilently();
     testTaskList.markCompleted();
     System.out.println("Are all tasks done?: " + testTaskList.allTasksDone());
     System.out.println("Old number of tasks is: " + testTaskList.getTasks().size());
-    testTaskList.update(testTaskList.getName(), testTaskList.getDue(), testTaskList.getSkill_id(), testTaskList.getPriority_level(), testTaskList.getCompleted(), testTaskList.getNumber_tasks());
-    int oldUserExperience = User.findUser(testUser.getUserId()).getUserExperience();
-    System.out.println("Old user experience is: " + oldUserExperience);
+    testTaskList.updateSilently();
+    int task1UserExperience = User.findUser(testUser.getUserId()).getUserExperience();
+    System.out.println("Experience after task1 is: " + task1UserExperience);
 
-    // Now add a second task and mark complete. Now try to game the system by getting extra bonus points by marking TaskList complete again
+
+    // Now add a second and third task and mark complete. Now try to game the system by getting extra bonus points by marking TaskList complete again
     Task testTask2 = new Task("Dishes", newDate, testUser.getUserId(), 1,1,1,1);
     testTask2.associateTaskWithTaskList(testTaskList.getId());
     testTask2.associateTaskWithSkill(testSkill.getSkillId());
-    testTask2.update(testTask2.getName(), testTask2.getDue(), testTask2.getSkill_id(), testTask2.getPriority_level(), testTask2.getTask_list_id(), testTask2.getImportance(), testTask2.getCompleted(), testTask2.getEstimated_time(), testTask2.getDifficulty());
+    testTask2.save();
     testTask2.markCompleted();
-    testTask2.update(testTask2.getName(), testTask2.getDue(), testTask2.getSkill_id(), testTask2.getPriority_level(), testTask2.getTask_list_id(), testTask2.getImportance(), testTask2.getCompleted(), testTask2.getEstimated_time(), testTask2.getDifficulty());
-    TaskList updatedTestTaskList = TaskList.find(testTaskList.getId());
-    List<Task> tmp = updatedTestTaskList.getTasks();
-    System.out.println("size after new task association is: " + tmp.size());
-    System.out.println("Is it done now?: " + updatedTestTaskList.allTasksDone());
-    updatedTestTaskList.markCompleted();
-    updatedTestTaskList.update(updatedTestTaskList.getName(), updatedTestTaskList.getDue(), updatedTestTaskList.getSkill_id(), updatedTestTaskList.getPriority_level(), updatedTestTaskList.getCompleted(), updatedTestTaskList.getNumber_tasks());
-    int newUserExperience = User.findUser(testUser.getUserId()).getUserExperience();
-    System.out.println("New user experience is: " + newUserExperience);
-    assertEquals(oldUserExperience, newUserExperience);
+    testTask2.updateSilently();
+
+    Task testTask3 = new Task("Take out trash", newDate, testUser.getUserId(), 1,1,1,1);
+    testTask3.associateTaskWithTaskList(testTaskList.getId());
+    testTask3.associateTaskWithSkill(testSkill.getSkillId());
+    testTask3.save();
+    testTask3.markCompleted();
+    testTask3.updateSilently();
+
+    int expAfterThreeTasks = User.findUser(testUser.getUserId()).getUserExperience();
+    System.out.println("Experience after three tasks is: " + expAfterThreeTasks);
+
+    testTaskList.markCompleted();
+    int expAfterBonus = User.findUser(testUser.getUserId()).getUserExperience();
+    System.out.println("Experience after bonus granted is: " + expAfterBonus);
+    System.out.println("Were bonus points added?: " + testTaskList.getBonusPointsAdded());
+
+    // testTaskList.updateSilently();
+
+    Task testTask4 = new Task("Take out trash", newDate, testUser.getUserId(), 1,1,1,1);
+    testTask4.associateTaskWithTaskList(testTaskList.getId());
+    testTask4.associateTaskWithSkill(testSkill.getSkillId());
+    testTask4.save();
+    testTask4.markCompleted();
+    testTask4.updateSilently();
+    int expAfterTask4 = User.findUser(testUser.getUserId()).getUserExperience();
+    System.out.println("Experience after task 4 completed is: " + expAfterTask4);
+
+    testTaskList.markCompleted();
+    int finalExperience = User.findUser(testUser.getUserId()).getUserExperience();
+    System.out.println("Experience after taskList is marked completed again is: " + finalExperience);
+
+    assertTrue(expAfterTask4 == (finalExperience));
   }
 
 }
