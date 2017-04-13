@@ -34,15 +34,23 @@ public abstract class TodoAbstract {
   }
 
   public String getReadableCreated() {
+    try {
     DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
     String text = df.format(this.getCreated());
     return text;
+  } catch (NullPointerException exception) {
+    return "No created date!";
+  }
   }
 
   public String getReadableDue() {
+    try {
     DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
     String text = df.format(this.getDue());
     return text;
+  } catch (NullPointerException exception) {
+    return "No due date!";
+  }
   }
 
   public Timestamp getDue(){

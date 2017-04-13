@@ -87,11 +87,11 @@ public class App {
       String name = request.queryParams("name");
       Timestamp dueDate = User.convertStringToTimestamp(request.queryParams("dueDate"));
       int priority = Integer.parseInt(request.queryParams("priority"));
-      int skillId = Integer.parseInt(reuqest.queryParams("skillId"));
+      int skillId = Integer.parseInt(request.queryParams("skillId"));
       int assignedTaskId = Integer.parseInt(request.queryParams("assignedTaskId"));
       TaskList newTaskList = new TaskList(name, priority, dueDate, 1); //TODO: change this 1 to User.all().get(0)
       newTaskList.save();
-      newTaskList.associateTaskListWithSkill(skilId);
+      newTaskList.associateTaskListWithSkill(skillId);
       Task.find(assignedTaskId).associateTaskWithTaskList(newTaskList.getId());
       response.redirect(request.headers("Referer"));
       return new ModelAndView(model, layout);
