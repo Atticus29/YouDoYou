@@ -28,9 +28,12 @@ public class User {
 
   public static Timestamp convertStringToTimestamp(String string) {
     try{
+      System.out.println(string);
       SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
       Date parsedDate = dateFormat.parse(string);
+      System.out.println(parsedDate);
       Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
+      System.out.println(timestamp);
       return timestamp;
     }catch(Exception e){
       return null;
