@@ -12,7 +12,7 @@ public class TaskList extends TodoAbstract {
   private int number_tasks;
   private boolean bonusPointsAdded;
 
-  public TaskList(String name, int priority_level, Timestamp due, int skill_id, int user_id) {
+  public TaskList(String name, int priority_level, Timestamp due, int user_id) {
     this.name = name;
 
     if(priority_level >= MIN_ALL && priority_level <= MAX_PRIORITY){
@@ -23,11 +23,16 @@ public class TaskList extends TodoAbstract {
 
     this.due = due;
     this.completed = false;
-    this.skill_id = skill_id;
+    this.skill_id = 0;
     this.user_id = user_id;
     this.number_tasks = 0;
     this.bonusPointsAdded = false;
     // number_tasks will be incremented upon association of task with tasklist (i.e., the task constructor) TODO
+  }
+
+  public void associateTaskWithSkill(int skill_id){
+    this.skill_id = skill_id;
+    this.updateSilently();
   }
 
   public boolean getBonusPointsAdded(){

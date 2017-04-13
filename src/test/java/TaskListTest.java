@@ -23,7 +23,7 @@ public class TaskListTest {
     testUser.saveUserToDatabase();
     newDate = Timestamp.valueOf(LocalDateTime.now().plusDays(10));
     testSkill = new Skill("Chore ninja", testUser.getUserId());
-    testTaskList = new TaskList("Household Chores", 1, newDate, testSkill.getSkillId(), testUser.getUserId());
+    testTaskList = new TaskList("Household Chores", 1, newDate, testUser.getUserId());
     testTaskList.save();
     testTask = new Task("Laundry", newDate, testUser.getUserId(), 1, 1,1,1);
     testTask.associateTaskWithTaskList(testTaskList.getId());
@@ -144,7 +144,7 @@ public class TaskListTest {
   @Test
   public void markCompleted_onlyWorksIfChildTasksExistAndAreDone_true(){
     // No tasks
-    TaskList testTaskList2 = new TaskList("Household Chores", 1, newDate, 1, testUser.getUserId());
+    TaskList testTaskList2 = new TaskList("Household Chores", 1, newDate, testUser.getUserId());
     testTaskList2.markCompleted();
     testTaskList2.update(testTaskList2.getName(), testTaskList2.getDue(), testTaskList2.getSkill_id(), testTaskList2.getPriority_level(), testTaskList2.getCompleted(), testTaskList2.getNumber_tasks());
     testTaskList2.save();
@@ -259,12 +259,12 @@ public class TaskListTest {
 
   @Test (expected = UnsupportedOperationException.class)
   public void PRIORITY_cannotBeAssignedBadNumbersTooLow_true(){
-    TaskList testTaskList1 = new TaskList("Yard",-1, newDate, 3, 2);
+    TaskList testTaskList1 = new TaskList("Yard",-1, newDate, 2);
   }
 
   @Test (expected = UnsupportedOperationException.class)
   public void PRIORITY_cannotBeAssignedBadNumbersTooHigh_true(){
-    TaskList testTaskList1 = new TaskList("Yard",11, newDate, 3, 2);
+    TaskList testTaskList1 = new TaskList("Yard",11, newDate, 2);
   }
 
 }
