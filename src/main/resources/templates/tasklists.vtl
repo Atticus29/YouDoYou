@@ -26,8 +26,8 @@
         #foreach ($tasklist in $tasklists)
         <tr>
           <td><a href="/tasklists/$tasklist.getId()">$tasklist.getName()</a></td>
-          <td>$tasklist.getCreated()</td>
-          <td>$tasklist.getDue()</td>
+          <td>$tasklist.getReadableCreated()</td>
+          <td>$tasklist.getReadableDue()</td>
           <td>$tasklist.getNumber_tasks()</td>
           <td>Some experience</td>
         </tr>

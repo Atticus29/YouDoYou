@@ -7,13 +7,13 @@
 <div class="center col-md-6">
 <h2>$skill.getName()</h2>
 <br>
-<h4>Created on: $skill.getCreated()</h4>
+<h4>Created on: $skill.getReadableCreated()</h4>
 <br>
-<h4>Due: $skill.getDue()</h4> <!-- TODO: change this and getcreated to a new method that parses info into readable dates -->
+<h4>Due: $skill.getReadableDue()</h4>
 <br>
 <h4>Task list: <a href="/skills/$skill.getTask_list_id()">$skill.getAssociatedTaskListName()</a></h4>
 <br>
-<h4>Task skill: <a href="/skills/$skill.getSkill_id()"></a>$skill.getAssociatedSkillName()</h4>
+<h4>Task skill: <a href="/skills/$skill.getSkill_id()">$skill.getAssociatedSkillName()</a></h4>
 
 </div>
 
@@ -44,8 +44,8 @@
           <!-- #foreach ($task in $skill.getTasks()) TODO: add appropriate method to skill.java
           <tr>
             <td><a href="/tasks/$task.getId()">$task.getName()</a></td>
-            <td>$task.getCreated()</td>
-            <td>$task.getDue()</td>
+            <td>$task.getReadableCreated()</td>
+            <td>$task.getReadableDue()</td>
             <td>Some experience</td>
           </tr>
           #end -->

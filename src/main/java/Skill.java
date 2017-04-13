@@ -16,6 +16,7 @@ public class Skill {
   private Timestamp created;
   // private int numTasksWithSkillCompleted;
   // TODO: implement numTasksWithSkillCompleted getter/save/etc
+  // TODO: implement getAllTasks for skill
   public Skill(String name, int userId) {
     this.name = name;
     this.userId = userId;
