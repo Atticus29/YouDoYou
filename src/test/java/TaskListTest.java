@@ -42,7 +42,7 @@ public class TaskListTest {
 
   @Test
   public void setNumber_tasks_changesNumberTasksTo5_true(){
-    System.out.println("originally, it is: " + testTaskList.getNumber_tasks());
+    assertEquals(0, testTaskList.getNumber_tasks());
     testTaskList.setNumber_tasks(5);
     assertEquals(5, testTaskList.getNumber_tasks());
   }
@@ -174,7 +174,7 @@ public class TaskListTest {
 
     assertEquals(3, testTaskList.getTasks().size());
 
-    int oldUserExperience = testUser.getUserExperience();
+    int oldUserExperience = User.findUser(testUser.getUserId()).getUserExperience();
     System.out.println("oldUserExperience is " + oldUserExperience);
     assertFalse(testTaskList.getCompleted());
     assertFalse(testTaskList.getBonusPointsAdded());
@@ -184,7 +184,7 @@ public class TaskListTest {
     assertTrue(testTaskList.getBonusPointsAdded());
 
     testTaskList.update(testTaskList.getName(), testTaskList.getDue(), testTaskList.getSkill_id(), testTaskList.getPriority_level(), testTaskList.getCompleted(), testTaskList.getNumber_tasks());
-    int newUserExperience = testUser.getUserExperience();
+    int newUserExperience = User.findUser(testUser.getUserId()).getUserExperience();
     System.out.println("newUserExperience is " + newUserExperience);
     assertTrue(newUserExperience > oldUserExperience);
   }
@@ -196,10 +196,11 @@ public class TaskListTest {
     testTask.update(testTask.getName(), testTask.getDue(), testTask.getSkill_id(), testTask.getPriority_level(), testTask.getTask_list_id(), testTask.getImportance(), testTask.getCompleted(), testTask.getEstimated_time(), testTask.getDifficulty());
     testTaskList.markCompleted();
     testTaskList.update(testTaskList.getName(), testTaskList.getDue(), testTaskList.getSkill_id(), testTaskList.getPriority_level(), testTaskList.getCompleted(), testTaskList.getNumber_tasks());
-    int oldUserExperience = testUser.getUserExperience();
+    int oldUserExperience = User.findUser(testUser.getUserId()).getUserExperience();
+    System.out.println("Old user experience is: " + oldUserExperience);
 
     // Now add a second task and mark complete. Now try to game the system by getting extra bonus points by marking TaskList complete again
-    Task testTask2 = new Task("Dishes", newDate, 1, 1,1,1,1);
+    Task testTask2 = new Task("Dishes", newDate, testUser.getUserId(), 1,1,1,1);
     testTask2.associateTaskWithTaskList(testTaskList.getId());
     testTask2.associateTaskWithSkill(testSkill.getSkillId());
     testTask2.update(testTask2.getName(), testTask2.getDue(), testTask2.getSkill_id(), testTask2.getPriority_level(), testTask2.getTask_list_id(), testTask2.getImportance(), testTask2.getCompleted(), testTask2.getEstimated_time(), testTask2.getDifficulty());
@@ -207,7 +208,8 @@ public class TaskListTest {
     testTask2.update(testTask2.getName(), testTask2.getDue(), testTask2.getSkill_id(), testTask2.getPriority_level(), testTask2.getTask_list_id(), testTask2.getImportance(), testTask2.getCompleted(), testTask2.getEstimated_time(), testTask2.getDifficulty());
     testTaskList.markCompleted();
     testTaskList.update(testTaskList.getName(), testTaskList.getDue(), testTaskList.getSkill_id(), testTaskList.getPriority_level(), testTaskList.getCompleted(), testTaskList.getNumber_tasks());
-    int newUserExperience = testUser.getUserExperience();
+    int newUserExperience = User.findUser(testUser.getUserId()).getUserExperience();
+    System.out.println("New user experience is: " + newUserExperience);
     assertEquals(oldUserExperience, newUserExperience);
   }
 

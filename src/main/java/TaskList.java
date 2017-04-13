@@ -42,20 +42,20 @@ public class TaskList extends TodoAbstract {
   public void markCompleted(){
     if (this.getTasks().size() > 0 && this.allTasksDone()){
       this.completed = true;
-      System.out.println("number_tasks is " + this.number_tasks);
+      // System.out.println("number_tasks is " + this.getTasks().size());
       //TODO find out why number_tasks isn't incrementing. For now, a workaround
       if(this.getTasks().size() > 2 && !this.bonusPointsAdded){
-        int bonusPoints = 5 * this.number_tasks;
-        System.out.println("user id is " + this.getUser_id());
+        int bonusPoints = 5 * this.getTasks().size();
+        // System.out.println("user id is " + this.getUser_id());
+        System.out.println("bonusPoints is: " + bonusPoints);
         User currentUser = User.findUser(this.getUser_id());
-        System.out.println("currentUser is " + (currentUser instanceof User));
-        // System.out.println("is null " + currentUser == null);
         int oldExp = currentUser.getUserExperience();
         // System.out.println("oldExp is" + oldExp);
         // System.out.println("is null " + oldExp==null);
         currentUser.updateUserExperience(oldExp + bonusPoints);
         this.bonusPointsAdded = true;
       }
+      this.update(this.name, this.due, this.skill_id, this.priority_level, this.completed, this.number_tasks);
     }
 
   }

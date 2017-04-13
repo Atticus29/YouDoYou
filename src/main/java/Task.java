@@ -35,11 +35,7 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
   public void associateTaskWithTaskList(int task_list_id){
     this.task_list_id = task_list_id;
     TaskList currentTaskList = TaskList.find(task_list_id);
-
-    // System.out.println("currentTaskList's number of tasks before the increment is " + currentTaskList.getNumber_tasks());
     currentTaskList.setNumber_tasks(currentTaskList.getNumber_tasks() + 1);
-    // System.out.println("currentTaskList's number of tasks after the increment is " + currentTaskList.getNumber_tasks());
-
     currentTaskList.update(currentTaskList.getName(), currentTaskList.getDue(), currentTaskList.getSkill_id(), currentTaskList.getPriority_level(), currentTaskList.getCompleted(), currentTaskList.getNumber_tasks());
 
   }
@@ -52,7 +48,8 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
 
     //TODO update experience to user
     User currentUser = User.findUser(this.user_id);
-    int oldExp = currentUser.getUserExperience();
+    System.out.println("should be true: " + (currentUser instanceof User));
+    int oldExp = User.findUser(currentUser.getUserId()).getUserExperience();
     currentUser.updateUserExperience(oldExp + pointsToAdd);
   }
 
