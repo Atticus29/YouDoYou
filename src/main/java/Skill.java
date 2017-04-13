@@ -3,9 +3,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 
 public class Skill {
   private String name;
@@ -14,15 +15,19 @@ public class Skill {
   private int level;
   private int experience;
   private Timestamp created;
-  // private int numTasksWithSkillCompleted;
-  // TODO: implement numTasksWithSkillCompleted getter/save/etc
-  // TODO: implement getAllTasks for skill
+  private int numTasksWithSkillCompleted;
+
+
   public Skill(String name, int userId) {
     this.name = name;
     this.userId = userId;
     this.level = 0;
     this.experience = 0;
-    // this.numTasksWithSkillCompleted = 0;
+    this.numTasksWithSkillCompleted = 0;
+  }
+
+  public int getNumTasksWithSkillCompleted() {
+    return this.numTasksWithSkillCompleted;
   }
 
   public String getSkillName() {
@@ -49,6 +54,16 @@ public class Skill {
     return this.created;
   }
 
+  public String getReadableCreated() {
+    try {
+    DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+    String text = df.format(this.created);
+    return text;
+  } catch (NullPointerException exception) {
+    return "No created date!";
+  }
+  }
+
   public int checkIfLevelUp() {
     int calculatedLevel = 0;
     int calcLevelHund = 100;
@@ -68,7 +83,44 @@ public class Skill {
 
   //DB stuff below
 
-  // TODO: add a getAllTasks
+
+  public List<Task> getAllTasksForSkill() {
+      try(Connection con = DB.sql2o.open()) {
+        String sql = "SELECT * FROM tasks WHERE skill_id = :id;";
+        List<Task> tasks = con.createQuery(sql)
+        .addColumnMapping("user_id", "userId")
+        .addParameter("id", this.id)
+        .throwOnMappingFailure(false)
+        .executeAndFetch(Task.class);
+        return tasks;
+      }
+  }
+
+  public List<Task> getAllCompletedTasksForSkill() {
+      try(Connection con = DB.sql2o.open()) {
+        String sql = "SELECT * FROM tasks WHERE skill_id = :id AND completed = true;";
+        List<Task> tasks = con.createQuery(sql)
+        .addColumnMapping("user_id", "userId")
+        .addParameter("id", this.id)
+        .throwOnMappingFailure(false)
+        .executeAndFetch(Task.class);
+        this.numTasksWithSkillCompleted = tasks.size();
+        return tasks;
+      }
+  }
+
+  public List<Task> getAllUncompletedTasksForSkill() {
+      try(Connection con = DB.sql2o.open()) {
+        String sql = "SELECT * FROM tasks WHERE skill_id = :id AND completed = false;";
+        List<Task> tasks = con.createQuery(sql)
+        .addColumnMapping("user_id", "userId")
+        .addParameter("id", this.id)
+        .throwOnMappingFailure(false)
+        .executeAndFetch(Task.class);
+        return tasks;
+      }
+  }
+
   public static List<Skill> getAllSkills() {
     try(Connection con = DB.sql2o.open()) {
       String sql = "SELECT * FROM skills";
@@ -115,7 +167,7 @@ public class Skill {
    }
   }
 
-  public void saveSkillToDatabase() {
+  public void saveSkillToDatabase() { //TODO: find out why this isn't saving created
      try(Connection con = DB.sql2o.open()) {
        String sql = "INSERT INTO skills (name, level, experience, created, user_id) VALUES (:name, :level, :experience, now(), :userId)";
        this.id = (int) con.createQuery(sql, true)
