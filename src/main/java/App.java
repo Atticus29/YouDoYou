@@ -130,6 +130,26 @@ public class App {
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 
+    post("/skills/new", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      String name = request.queryParams("name");
+      int assignedTaskId = Integer.parseInt(request.queryParams("assignedTaskId"));
+      int assignedTaskId2 = Integer.parseInt(request.queryParams("assignedTaskId2"));
+      int assignedTaskId3 = Integer.parseInt(request.queryParams("assignedTaskId3"));
+      int assignedTaskListId = Integer.parseInt(request.queryParams("assignedTaskListId"));
+      Skill newSkill = new Skill(name, 1); // TODO: change that 1 to user.all().get(0)
+      newSkill.saveSkillToDatabase();
+      if (assignedTaskId != 0) {Task.find(assignedTaskId).associateTaskWithSkill(newSkill.getSkillId());}
+      if (assignedTaskId2 != 0)
+      {Task.find(assignedTaskId2).associateTaskWithSkill(newSkill.getSkillId());}
+      if (assignedTaskId3 != 0)
+      {Task.find(assignedTaskId3).associateTaskWithSkill(newSkill.getSkillId());}
+      if (assignedTaskListId != 0)
+      {TaskList.find(assignedTaskListId).associateTaskListWithSkill(newSkill.getSkillId());}
+      response.redirect(request.headers("Referer"));
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
 
     get("/player/:playerName", (request, response) -> {
       Map<String, Object> model = new HashMap<String, Object>();

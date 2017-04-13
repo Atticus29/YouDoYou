@@ -35,7 +35,7 @@ public abstract class TodoAbstract {
 
   public String getReadableCreated() {
     try {
-    DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+    DateFormat df = new SimpleDateFormat("dd-MM-yyyy @ h:mm a");
     String text = df.format(this.getCreated());
     return text;
   } catch (NullPointerException exception) {
@@ -45,7 +45,7 @@ public abstract class TodoAbstract {
 
   public String getReadableDue() {
     try {
-    DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+    DateFormat df = new SimpleDateFormat("dd-MM-yyyy @ h:mm a");
     String text = df.format(this.getDue());
     return text;
   } catch (NullPointerException exception) {

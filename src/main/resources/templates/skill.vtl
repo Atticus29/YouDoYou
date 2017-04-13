@@ -1,19 +1,21 @@
 <!-- begin skill.vtl -->
+
+<link rel="stylesheet" href="/css/table.css">
+<script type="text/javascript" src="/js/table.js"></script>
+
 <div class="row">
 <div class="col-md-2">
   <!-- alignment -->
 </div>
 
 <div class="center col-md-6">
-<h2>$skill.getName()</h2>
+<h2>$skill.getSkillName()</h2>
 <br>
 <h4>Created on: $skill.getReadableCreated()</h4>
 <br>
-<h4>Due: $skill.getReadableDue()</h4>
+<h4>Uncompleted tasks in this skill: $skill.getAllUncompletedTasksForSkill()</h4>
 <br>
-<h4>Task list: <a href="/skills/$skill.getTask_list_id()">$skill.getAssociatedTaskListName()</a></h4>
-<br>
-<h4>Task skill: <a href="/skills/$skill.getSkill_id()">$skill.getAssociatedSkillName()</a></h4>
+<h4>Tasks completed in this skill: $skill.getNumTasksWithSkillCompleted()</h4>
 
 </div>
 
@@ -41,14 +43,14 @@
     <div class="tbl-content">
       <table cellpadding="0" cellspacing="0" border="0">
         <tbody>
-          <!-- #foreach ($task in $skill.getTasks()) TODO: add appropriate method to skill.java
+          #foreach ($task in $skill.getAllTasksForSkill())
           <tr>
             <td><a href="/tasks/$task.getId()">$task.getName()</a></td>
             <td>$task.getReadableCreated()</td>
             <td>$task.getReadableDue()</td>
             <td>Some experience</td>
           </tr>
-          #end -->
+          #end
         </tbody>
       </table>
     </div>
