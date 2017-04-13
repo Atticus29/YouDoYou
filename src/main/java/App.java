@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import spark.ModelAndView;
 import spark.template.velocity.VelocityTemplateEngine;
 import static spark.Spark.*;
+import java.text.SimpleDateFormat;
 
 public class App {
   public static void main(String[] args) {
@@ -71,8 +72,8 @@ public class App {
 
     get("/skills/:id", (request, response) -> {
       Map<String, Object> model = new HashMap<String, Object>();
-      Skill skill = Skill.find(Integer.parseInt(request.params("id")));
-      model.put("tasklist", tasklist);
+      Skill skill = Skill.findSkill(Integer.parseInt(request.params("id")));
+      model.put("skill", skill);
       model.put("template", "templates/skill.vtl");
       model.put("tasks", Task.all());
       model.put("tasklists", TaskList.all());

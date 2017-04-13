@@ -1,3 +1,11 @@
+import org.junit.*;
+import static org.junit.Assert.*;
+import org.sql2o.*;
+import java.sql.Timestamp;
+import java.util.Date;
+import java.text.DateFormat;
+import java.time.LocalDateTime;
+
 public class TaskTest {
   private Task testTask;
   private User testUser;
@@ -116,7 +124,7 @@ public class TaskTest {
     testTask1 = new Task("Laundry", newDate, 1, 1, 1,120,1);
     assertEquals(2.0, testTask1.calculateEstimatedTimeMultiplier(testTask1.getEstimated_time()),0.001);
     testTask1 = new Task("Laundry", newDate, 1, 1, 1,3000,1);
-    assertEquals(2, testTask1.calculateEstimatedTimeMultiplier(testTask1.getEstimated_time()),0.001);
+    assertEquals(2.0, testTask1.calculateEstimatedTimeMultiplier(testTask1.getEstimated_time()),0.001);
   }
 
   @Test (expected = UnsupportedOperationException.class)

@@ -135,11 +135,11 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
 
   public String getAssociatedSkillName() {
     try {
-     Skill.find(this.skill_id).getName();
+     Skill.findSkill(this.skill_id).getSkillName();
    } catch (NullPointerException exception) {
      return "";
    }
-   return Skill.find(this.skill_id).getName();
+   return Skill.findSkill(this.skill_id).getSkillName();
   }
 
   public static Task find(int id) {
