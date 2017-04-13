@@ -75,7 +75,7 @@ public class App {
       Map<String, Object> model = new HashMap<String, Object>();
       TaskList tasklist = TaskList.find(Integer.parseInt(request.params("id")));
       model.put("tasklist", tasklist);
-      model.put("template", "templates/task.vtl");
+      model.put("template", "templates/tasklist.vtl");
       model.put("tasks", Task.all());
       model.put("tasklists", TaskList.all());
       model.put("skills", Skill.getAllSkills());
