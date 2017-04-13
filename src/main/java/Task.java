@@ -108,6 +108,15 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
    return TaskList.find(this.task_list_id).getName();
   }
 
+  public String getAssociatedSkillName() {
+    try {
+     Skill.find(this.skill_id).getName();
+   } catch (NullPointerException exception) {
+     return "";
+   }
+   return Skill.find(this.skill_id).getName();
+  }
+
   public static Task find(int id) {
     try(Connection con = DB.sql2o.open()) {
       String sql = "SELECT * FROM tasks WHERE id=:id ;";
