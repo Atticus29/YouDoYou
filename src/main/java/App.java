@@ -12,6 +12,10 @@ public class App {
     staticFileLocation("/public");
     String layout = "templates/layout.vtl";
 
+    // Create a dummy user
+    User dummy = new User("Jehosephat");
+    dummy.saveUserToDatabase();
+
     get("/", (request, response) -> {
       Map<String, Object> model = new HashMap<String, Object>();
       model.put("template", "templates/index.vtl");
@@ -78,6 +82,18 @@ public class App {
       model.put("tasks", Task.all());
       model.put("tasklists", TaskList.all());
       model.put("skills", Skill.getAllSkills());
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    get("/player/:playerName", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      String currentUserName = request.params(":playerName");
+      User currentUser = User.findUserByName(currentUserName);
+      model.put("player", currentUser);
+      model.put("template", "templates/player.vtl");
+      // model.put("tasks", Task.all());
+      // model.put("tasklists", TaskList.all());
+      // model.put("skills", Skill.getAllSkills());
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 

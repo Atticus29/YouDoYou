@@ -22,6 +22,10 @@ public class User {
     this.experience = 0;
   }
 
+  public String getCreatedAsString(){
+    return this.created.toGMTString();
+  }
+
   public String getUserName() {
     return this.name;
   }
@@ -52,92 +56,112 @@ public class User {
       if (calculatedLevel == 1) {
         calcLevelHund = 200;
       } else {
-      calcLevelHund = calculatedLevel * 100;
+        calcLevelHund = calculatedLevel * 100;
+      }
     }
-  }
     return calculatedLevel;
   }
 
   //DB stuff below
 
   public void updateUserName(String newUserName) {
-   try(Connection con = DB.sql2o.open()) {
-     String sql = "UPDATE users SET name = :name WHERE id = :id";
-     con.createQuery(sql)
-     .addParameter("name", newUserName)
-     .addParameter("id", this.id)
-     .executeUpdate();
-   }
- }
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "UPDATE users SET name = :name WHERE id = :id";
+      con.createQuery(sql)
+      .addParameter("name", newUserName)
+      .addParameter("id", this.id)
+      .executeUpdate();
+    }
+  }
 
-//update experience by taking in new experience amount and adding it to current experience. experience should be cumulative and never reset. IE: level 1 is 100 xp, level 2 is 200 xp, so total xp at level 2 would be 300
- public void updateUserExperience(int experienceAmount) {
-   try(Connection con = DB.sql2o.open()) {
-     String sql = "UPDATE users SET experience = :experience WHERE id = :id";
-     con.createQuery(sql)
-     .addParameter("id", id)
-     .addParameter("experience", this.experience + experienceAmount)
-     .executeUpdate();
-     this.experience += experienceAmount;
-     int newLevel = this.checkIfLevelUp();
-     this.updateUserLevel(newLevel);
-   }
- }
+  //update experience by taking in new experience amount and adding it to current experience. experience should be cumulative and never reset. IE: level 1 is 100 xp, level 2 is 200 xp, so total xp at level 2 would be 300
+  public void updateUserExperience(int experienceAmount) {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "UPDATE users SET experience = :experience WHERE id = :id";
+      con.createQuery(sql)
+      .addParameter("id", id)
+      .addParameter("experience", this.experience + experienceAmount)
+      .executeUpdate();
+      this.experience += experienceAmount;
+      int newLevel = this.checkIfLevelUp();
+      this.updateUserLevel(newLevel);
+    }
+  }
 
-//this should only be used for manually updating user level? or maybe only be called from within the level check method
- public void updateUserLevel(int level) {
-   try(Connection con = DB.sql2o.open()) {
-     String sql = "UPDATE users SET level = :level WHERE id = :id";
-     con.createQuery(sql)
-     .addParameter("id", id)
-     .addParameter("level", level)
-     .executeUpdate();
-   }
- }
+  //this should only be used for manually updating user level? or maybe only be called from within the level check method
+  public void updateUserLevel(int level) {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "UPDATE users SET level = :level WHERE id = :id";
+      con.createQuery(sql)
+      .addParameter("id", id)
+      .addParameter("level", level)
+      .executeUpdate();
+    }
+  }
 
   public void saveUserToDatabase() {
-     try(Connection con = DB.sql2o.open()) {
-       String sql = "INSERT INTO users (name, level, experience, created) VALUES (:name, :level, :experience, now())";
-       this.id = (int) con.createQuery(sql, true)
-       .addParameter("name", this.name)
-       .addParameter("level", this.level)
-       .addParameter("experience", this.experience)
-       .executeUpdate()
-       .getKey();
-     }
-   }
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "INSERT INTO users (name, level, experience, created) VALUES (:name, :level, :experience, now())";
+      this.id = (int) con.createQuery(sql, true)
+      .addParameter("name", this.name)
+      .addParameter("level", this.level)
+      .addParameter("experience", this.experience)
+      .executeUpdate()
+      .getKey();
+    }
+  }
 
-   public static User findUser(int id) {
-     try(Connection con = DB.sql2o.open()) {
-       String sql = "SELECT * FROM users WHERE id = :id";
-       User client = con.createQuery(sql)
-       .addParameter("id", id)
-       .throwOnMappingFailure(false)
-       .executeAndFetchFirst(User.class);
-       return client;
-     }
-   }
+  public static User findUser(int id) {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT * FROM users WHERE id = :id";
+      User client = con.createQuery(sql)
+      .addParameter("id", id)
+      .throwOnMappingFailure(false)
+      .executeAndFetchFirst(User.class);
+      return client;
+    }
+  }
 
-   public List<Skill> findAllUserSkills() {
-     try(Connection con = DB.sql2o.open()) {
-       String sql = "SELECT * FROM skills WHERE user_id = :id";
-       return con.createQuery(sql)
-       .addParameter("id", this.id)
-       .throwOnMappingFailure(false)
-       .executeAndFetch(Skill.class);
-     }
-   }
+  public List<Skill> findAllUserSkills() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT * FROM skills WHERE user_id = :id";
+      return con.createQuery(sql)
+      .addParameter("id", this.id)
+      .throwOnMappingFailure(false)
+      .executeAndFetch(Skill.class);
+    }
+  }
 
 
-   @Override
-   public boolean equals(Object otherUser){
-     if (!(otherUser instanceof User)){
-       return false;
-     } else {
-       User newUser = (User) otherUser;
-       return this.getUserName().equals(newUser.getUserName()) && this.getUserId() == newUser.getUserId();
-     }
-   }
+  @Override
+  public boolean equals(Object otherUser){
+    if (!(otherUser instanceof User)){
+      return false;
+    } else {
+      User newUser = (User) otherUser;
+      return this.getUserName().equals(newUser.getUserName()) && this.getUserId() == newUser.getUserId();
+    }
+  }
+
+  public static List<User> all(){
+    String sqlQuery = "SELECT * FROM users;";
+    try(Connection con=DB.sql2o.open()){
+      List<User> results = con.createQuery(sqlQuery)
+      .executeAndFetch(User.class);
+      return results;
+    }
+  }
+
+  public static User findUserByName(String name) {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT * FROM users WHERE name = :name";
+      User user = con.createQuery(sql)
+      .addParameter("name", name)
+      .throwOnMappingFailure(false)
+      .executeAndFetchFirst(User.class);
+      return user;
+    }
+  }
 
 
 }
