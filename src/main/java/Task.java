@@ -25,6 +25,8 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
     this.importance = importance;
     this.estimated_time = estimated_time;
     this.difficulty = difficulty;
+    this.task_list_id = null;
+    this.skill_id = null;
   }
 
   public void associateTaskWithSkill(int skill_id){
@@ -53,6 +55,12 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
     User currentUser = User.findUser(this.user_id);
     int oldExp = User.findUser(currentUser.getUserId()).getUserExperience();
     currentUser.updateUserExperience(oldExp + pointsToAdd);
+
+    if(this.task_list_id != null){
+      TaskList associatedTaskList = TaskList.find(this.task_list_id);
+      //taskLists's markCompleted will check whether all tasks are done before marking completed
+      associatedTaskList.markCompleted();
+    }
   }
 
 
