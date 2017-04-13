@@ -1,12 +1,11 @@
 <!-- begin skills.vtl -->
 
 <link rel="stylesheet" href="/css/table.css">
-<script type="text/javascript" src="/js/table.js">
+<script type="text/javascript" src="/js/table.js"></script>
 
-</script>
 <section>
   <!--for demo wrap-->
-  <h1>Fixed Table header</h1>
+  <h1>Your skills</h1>
   <div class="tbl-header">
     <table cellpadding="0" cellspacing="0" border="0">
       <thead>
@@ -15,6 +14,7 @@
           <th>Created</th>
           <th>Level</th>
           <th>Experience</th>
+          <th>Tasks with this skill</th>
           <th>Number of tasks completed</th>
         </tr>
       </thead>
@@ -25,13 +25,63 @@
       <tbody>
         #foreach ($skill in $skills)
         <tr>
-          <td><a href="/skills/$skill.getId()">$skill.getSkillName()</a></td>
-          <td>$skill.getSkillCreated()</td>
+          <td><a href="/skills/$skill.getSkillId()">$skill.getSkillName()</a></td>
+          <td>$skill.getReadableCreated()</td>
           <td>$skill.getSkillLevel()</td>
           <td>$skill.getSkillExperience()</td>
-          <td>Some number</td>
-        </tr>
+          <td>
+            <ul>
+          #foreach ($task in $skill.getAllTasksForSkill())
+          <li><a href="/tasks/$task.getId()">$task.getName()</a></li>
+          #end
+        </ul>
+        </td>
+        <td>
+        <ul>
+        #foreach ($task in $skill.getAllCompletedTasksForSkill())
+        <li><a href="/tasks/$task.getId()">$task.getName()</a></li>
         #end
+      </ul>
+      </td>
+    </tr>
+      #end
+      <form action="/skills/new" method="post">
+        <tr>
+          <td>Skill name:<input id="name" name="name" type="text" class="form-control" value="Task name" style="width: 120px" required></td>
+          <td>Assign a task list:
+            <select name="assignedTaskListId" type="text">
+              <option value="0"></option>
+              #foreach ($tasklist in $tasklists)
+              <option value="$tasklist.getId()">$tasklist.getName()</option>
+              #end
+            </select>
+          </td>
+          <td>Assign a task:
+            <select name="assignedTaskId" type="text">
+              <option value="0"></option>
+              #foreach ($task in $tasks)
+              <option value="$task.getId()">$task.getName()</option>
+              #end
+            </select>
+          </td>
+          <td>Assign a task:
+            <select name="assignedTaskId2" type="text">
+              <option value="0"></option>
+              #foreach ($task in $tasks)
+              <option value="$task.getId()">$task.getName()</option>
+              #end
+            </select>
+          </td>
+          <td>Assign a task:
+            <select name="assignedTaskId3" type="text">
+              <option value="0"></option>
+              #foreach ($task in $tasks)
+              <option value="$task.getId()">$task.getName()</option>
+              #end
+            </select>
+          </td>
+          <td><button type="submit" class="btn btn-success">Add skill</button></td>
+        </tr>
       </tbody>
     </table>
   </div>
