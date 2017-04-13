@@ -72,7 +72,7 @@ public class App {
     get("/skills/:id", (request, response) -> {
       Map<String, Object> model = new HashMap<String, Object>();
       Skill skill = Skill.find(Integer.parseInt(request.params("id")));
-      model.put("tasklist", tasklist);
+      model.put("skill", skill);
       model.put("template", "templates/skill.vtl");
       model.put("tasks", Task.all());
       model.put("tasklists", TaskList.all());
@@ -80,6 +80,14 @@ public class App {
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 
+    get("/user/:id", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      User user = User.find(Integer.parseInt(request.params("id")));
+      model.put("user", user);
+      model.put("tasks", Task.all());
+      model.put("tasklists", TaskList.all());
+      model.put("skills", Skill.getAllSkills());
+    }, new VelocityTemplateEngine());
 
   }
 }

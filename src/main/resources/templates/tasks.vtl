@@ -1,7 +1,7 @@
 <link rel="stylesheet" href="/css/table.css">
-<script type="text/javascript" src="/js/table.js">
+<script type="text/javascript" src="/js/table.js"></script>
+<script type="text/javascript" src="/js/date.js"></script>
 
-</script>
 <section>
   <!--for demo wrap-->
   <h1>Fixed Table header</h1>
@@ -12,7 +12,12 @@
           <th>Task</th>
           <th>Created</th>
           <th>Due</th>
+          <th>Priority level</th>
+          <th>Estimated time</th>
+          <th>Difficulty</th>
+          <th>Importance</th>
           <th>Task list</th>
+          <th>Skill</th>
           <th>Experience</th>
         </tr>
       </thead>
@@ -26,11 +31,55 @@
           <td><a href="/tasks/$task.getId()">$task.getName()</a></td>
           <td>$task.getReadableCreated()</td>
           <td>$task.getReadableDue()</td>
+          <td>$task.getPriority_level()</td>
+          <td>$task.getEstimated_time()</td>
+          <td>$task.getDifficulty()</td>
+          <td>$task.getImportance()</td>
           <td>$task.getAssociatedTaskListName()</td>
-          <td>Some experience</td>
+          <td>$task.getAssociatedSkillName()</td>
+          <td>Some experience</td> <!-- TODO: add experience value for task here -->
         </tr>
         #end
+        <form action="/tasks/new" method="post">
+          <tr>
+            <td><input id="name" name="name" type="text" class="form-control" value="Task name" required></td>
+            <td><input type="date" name="dueDate" min="2017-04-13" class="form-control" required></td>
+            <td><input type="number" name="priority" min="1" max="10" class="form-control" required></td>
+            <td>Est. time in minutes:<input type="number" name="estimatedTime" min="1" class="form-control" required></td>
+            <td><input type="number" name="difficulty" min="1" max="10" class="form-control" required></td>
+            <td><input type="number" name="importance" min="1" max="10" class="form-control" required></td>
+            <td>
+              <select name="taskListName" type="text">
+                #foreach ($tasklist in $tasklists)
+                <option value="$tasklist.getId()">$tasklist.getName()</option>
+                #end
+              </select>
+            </td>
+            <td>
+              <select name="skillName" type="text">
+                #foreach ($skill in $skills)
+                <option value="$skill.getId()">$skill.getName()</option>
+                #end
+              </select>
+            </td>
+            <td><button type="submit" class="btn btn-success">Add task</button></td>
+          </tr>
+        </form>
       </tbody>
     </table>
   </div>
 </section>
+
+
+<!-- <form action="/clients/new" method="post">
+<td><input id="name" name="name" type="text" class="form-control" value="client name" required></td>
+<td><input type="date" name="appointmentDate" min="2017-04-01" class="form-control" required><br></td>
+<td><input type="time" name="appointmentTime" min="11:00" max="20:00" step="900" class="form-control" required></td>
+<td><select name="stylistName" type="text" required>
+#foreach ($stylist in $stylists)
+<option value="$stylist.getStylistId()">$stylist.getStylistName()</option>
+#end
+</select>
+</td>
+<td><button type="submit" class="btn btn-success">Add client</button></td>
+</form> -->
