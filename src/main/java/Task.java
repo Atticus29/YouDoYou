@@ -200,6 +200,15 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
     }
   }
 
+  public static List<Task> allTasksDueToday() {
+  String sqlQuery = "SELECT * FROM tasks WHERE due = now()::date ORDER BY due DESC;";
+  try(Connection con=DB.sql2o.open()){
+    List<Task> results = con.createQuery(sqlQuery)
+    .executeAndFetch(Task.class);
+    return results;
+  }
+}
+
   public void update(String name, Timestamp due, int skill_id, int priority_level, int task_list_id, int importance, boolean completed, int estimated_time, int difficulty) {
     try(Connection con = DB.sql2o.open()) {
       String sql = "UPDATE tasks SET name=:name, due=:due, skill_id=:skill_id, priority_level=:priority_level, task_list_id=:task_list_id, importance=:importance, completed=:completed, estimated_time=:estimated_time, difficulty=:difficulty WHERE id=:id;";
