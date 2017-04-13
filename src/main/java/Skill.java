@@ -14,12 +14,14 @@ public class Skill {
   private int level;
   private int experience;
   private Timestamp created;
-
+  // private int numTasksWithSkillCompleted;
+  // TODO: implement numTasksWithSkillCompleted getter/save/etc
   public Skill(String name, int userId) {
     this.name = name;
     this.userId = userId;
     this.level = 0;
     this.experience = 0;
+    // this.numTasksWithSkillCompleted = 0;
   }
 
   public String getSkillName() {
