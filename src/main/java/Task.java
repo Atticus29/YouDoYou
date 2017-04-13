@@ -15,6 +15,7 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
   private int difficulty;
 
 
+
   public Task(String name, Timestamp due, int user_id, int priority_level, int importance, int estimated_time, int difficulty) {
     this.name = name;
     this.created = new Timestamp(new Date().getTime()); //TODO
@@ -97,6 +98,23 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
     return this.task_list_id;
   }
 
+  // public String getAssociatedTaskListName() {
+  //   if (this.getTask_list_id()) {
+  //     return TaskList.find(getTask_list_id()).getName();
+  //   } else {
+  //     return "";
+  //   }
+  // }
+
+  public String getAssociatedTaskListName() {
+    try {
+     TaskList.find(this.task_list_id).getName();
+   } catch (NullPointerException exception) {
+     return "";
+   }
+   return TaskList.find(this.task_list_id).getName();
+  }
+
   public static Task find(int id) {
     try(Connection con = DB.sql2o.open()) {
       String sql = "SELECT * FROM tasks WHERE id=:id ;";
@@ -173,8 +191,10 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
     }
   }
 
+
   public void updateSilently(){
     this.update(this.name, this.due, this.skill_id, this.priority_level, this.task_list_id, this.importance, this.completed, this.estimated_time, this.difficulty);
   }
+
 
 }

@@ -65,6 +65,17 @@ public class Skill {
 
   //DB stuff below
 
+  public static List<Skill> getAllSkills() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT * FROM skills";
+      List<Skill> skills = con.createQuery(sql)
+      .addColumnMapping("user_id", "userId")
+      .throwOnMappingFailure(false)
+      .executeAndFetch(Skill.class);
+      return skills;
+    }
+  }
+
   public void updateSkillName(String newSkillName) {
    try(Connection con = DB.sql2o.open()) {
      String sql = "UPDATE skills SET name = :name WHERE id = :id";
