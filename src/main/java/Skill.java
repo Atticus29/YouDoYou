@@ -167,7 +167,7 @@ public class Skill {
    }
   }
 
-  public void saveSkillToDatabase() { //TODO: find out why this isn't saving created
+  public void saveSkillToDatabase() {
      try(Connection con = DB.sql2o.open()) {
        String sql = "INSERT INTO skills (name, level, experience, created, user_id) VALUES (:name, :level, :experience, now(), :userId)";
        this.id = (int) con.createQuery(sql, true)
