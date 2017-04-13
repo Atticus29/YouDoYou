@@ -136,6 +136,15 @@ public class TaskList extends TodoAbstract {
     }
   }
 
+  public static List<TaskList> allTaskListsDueToday() {
+  String sqlQuery = "SELECT * FROM task_lists WHERE due = now()::date ORDER BY due DESC;";
+  try(Connection con=DB.sql2o.open()){
+    List<TaskList> results = con.createQuery(sqlQuery)
+    .executeAndFetch(TaskList.class);
+    return results;
+  }
+}
+
   public void update(String name, Timestamp due, int skill_id, int priority_level, boolean completed, int number_tasks) {
     try(Connection con = DB.sql2o.open()) {
       String sql = "UPDATE task_lists SET name=:name, due=:due, skill_id=:skill_id, priority_level=:priority_level, completed=:completed, number_tasks=:number_tasks WHERE id=:id;";

@@ -166,7 +166,9 @@ public class App {
 
     get("/duetoday", (request, response) -> {
       Map<String, Object> model = new HashMap<String, Object>();
-
+      model.put("tasks", Task.allTasksDueToday());
+      model.put("tasklists", Task.allTaskListsDueToday());
+      model.put("template", "templates/duetoday.vtl");
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 
