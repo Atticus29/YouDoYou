@@ -65,6 +65,7 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
     TaskList currentTaskList = TaskList.find(task_list_id);
     currentTaskList.setNumber_tasks(currentTaskList.getNumber_tasks() + 1);
     if(!this.getCompleted()){
+      System.out.println("Your task was marked completed. Should now check to see if it can do the same to parent taskList");
       currentTaskList.markIncomplete();
     }
     currentTaskList.updateSilently();

@@ -166,4 +166,16 @@ public class TaskTest {
     Task testTask1 = new Task("Laundry", newDate, 3, 1, 1,-1,1);
   }
 
+  @Test
+  public void markCompleted_marksItsParentTaskListDoneIfItCompletesIt_true(){
+    TaskList testTaskList = new TaskList("Drudgery", 1, newDate, 7,7);
+    testTaskList.save();
+    int testTaskListId = testTaskList.getId();
+    testTask.associateTaskWithTaskList(testTaskListId);
+    assertFalse(testTaskList.getCompleted());
+    testTask.markCompleted();
+    assertTrue(testTask.getCompleted());
+    assertTrue(TaskList.find(testTaskList.getId()).getCompleted());
+  }
+
 }

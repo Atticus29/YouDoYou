@@ -63,6 +63,7 @@ public class TaskList extends TodoAbstract {
         this.bonusPointsAdded = true;
       }
       this.updateSilently();
+      System.out.println("Should be completed. Is it?: " + this.getCompleted());
     }
 
   }
