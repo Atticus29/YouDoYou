@@ -45,8 +45,8 @@
         <form action="/tasks/new" method="post">
           <tr>
             <td>Task name:<input id="name" name="name" type="text" class="form-control" value="Task name" style="width: 120px" required></td>
-            <td></td>
-            <td>Due:<br><input type="date" name="dueDate" min="2017-04-13" class="form-control" style="width: 80px" required></td>
+            <td>Due time:<br><input type="time" name="dueTime" required></td>
+            <td>Due date:<br><input type="date" name="dueDate" min="2017-04-13" class="form-control" style="width: 80px" required></td>
             <td>Priority:<br><input type="number" name="priority" min="1" max="10" class="form-control" required></td>
             <td>Est. time in minutes:<input type="number" name="estimatedTime" min="1" class="form-control" style="width: 50px" required></td>
             <td>Difficulty:<input type="number" name="difficulty" min="1" max="10" class="form-control" required></td>

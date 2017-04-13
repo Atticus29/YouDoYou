@@ -55,7 +55,8 @@ public class App {
       Map<String, Object> model = new HashMap<String, Object>();
       model.put("user", dummy);
       String name = request.queryParams("name");
-      Timestamp dueDate = User.convertStringToTimestamp(request.queryParams("dueDate"));
+      // Timestamp dueDate = User.convertStringToTimestamp(request.queryParams("dueDate")+request.queryParams("dueTime"));
+      Timestamp dueDate = Timestamp.valueOf(request.queryParams("dueDate")+" "+request.queryParams("dueTime")+":00");
       int priority = Integer.parseInt(request.queryParams("priority"));
       int estimatedTime = Integer.parseInt(request.queryParams("estimatedTime"));
       int difficulty = Integer.parseInt(request.queryParams("difficulty"));
@@ -96,14 +97,14 @@ public class App {
       Map<String, Object> model = new HashMap<String, Object>();
       model.put("user", dummy);
       String name = request.queryParams("name");
-      Timestamp dueDate = User.convertStringToTimestamp(request.queryParams("dueDate"));
+      Timestamp dueDate = Timestamp.valueOf(request.queryParams("dueDate")+" "+request.queryParams("dueTime")+":00");
       int priority = Integer.parseInt(request.queryParams("priority"));
       int skillId = Integer.parseInt(request.queryParams("skillId"));
       int assignedTaskId = Integer.parseInt(request.queryParams("assignedTaskId"));
       TaskList newTaskList = new TaskList(name, priority, dueDate, 1); //TODO: change this 1 to User.all().get(0)
       newTaskList.save();
-      newTaskList.associateTaskListWithSkill(skillId);
-      Task.find(assignedTaskId).associateTaskWithTaskList(newTaskList.getId());
+      if (skillId != 0) {newTaskList.associateTaskListWithSkill(skillId);}
+      if (assignedTaskId != 0) {Task.find(assignedTaskId).associateTaskWithTaskList(newTaskList.getId());}
       response.redirect(request.headers("Referer"));
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());

@@ -137,7 +137,7 @@ public class TaskList extends TodoAbstract {
   }
 
   public static List<TaskList> allTaskListsDueToday() {
-  String sqlQuery = "SELECT * FROM task_lists WHERE due = now()::date ORDER BY due DESC;";
+  String sqlQuery = "SELECT * FROM task_lists WHERE date_trunc('day',due) = current_date;";
   try(Connection con=DB.sql2o.open()){
     List<TaskList> results = con.createQuery(sqlQuery)
     .executeAndFetch(TaskList.class);
