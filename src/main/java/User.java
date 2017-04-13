@@ -5,9 +5,8 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.Date;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 public class User {
   private String name;
@@ -22,8 +21,20 @@ public class User {
     this.experience = 0;
   }
 
+
   public String getCreatedAsString(){
     return this.created.toGMTString();
+  }
+
+  public static Timestamp convertStringToTimestamp(String string) {
+    try{
+      SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss.SSS");
+      Date parsedDate = dateFormat.parse(string);
+      Timestamp timestamp = new java.sql.Timestamp(parsedDate.getTime());
+      return timestamp;
+    }catch(Exception e){
+      return null;
+    }
   }
 
   public String getUserName() {
@@ -162,6 +173,5 @@ public class User {
       return user;
     }
   }
-
 
 }

@@ -45,7 +45,7 @@ public class TaskTest {
 
   @Test
   public void associateTaskWithTaskList_GivesCorrectTaskI_true(){
-    TaskList testTaskList = new TaskList("Drudgery", 1, newDate, 7,7);
+    TaskList testTaskList = new TaskList("Drudgery", 1, newDate, 7);
     testTaskList.save();
     int testTaskListId = testTaskList.getId();
     testTask.associateTaskWithTaskList(testTaskListId);
@@ -54,7 +54,7 @@ public class TaskTest {
 
   @Test
   public void associateTaskWithTaskList_incrementsNumberTasksOfAssociatedTaskList_true(){
-    TaskList testTaskList = new TaskList("Drudgery", 1, newDate, 7,7);
+    TaskList testTaskList = new TaskList("Drudgery", 1, newDate, 7);
     testTaskList.save();
     assertEquals(0, testTaskList.getNumber_tasks());
     int testTaskListId = testTaskList.getId();
@@ -164,7 +164,7 @@ public class TaskTest {
 
   @Test
   public void markCompleted_marksItsParentTaskListDoneIfItCompletesIt_true(){
-    TaskList testTaskList = new TaskList("Drudgery", 1, newDate, 7,7);
+    TaskList testTaskList = new TaskList("Drudgery", 1, newDate, 7);
     testTaskList.save();
     int testTaskListId = testTaskList.getId();
     testTask.associateTaskWithTaskList(testTaskListId);
