@@ -39,7 +39,7 @@ td{
 
 
 tr:nth-child(even) {
-    background-color: #CCCCFF;
+    background-color: #ffcccc;
 }
 
 @import url(http://fonts.googleapis.com/css?family=Roboto:400,500,300,700);

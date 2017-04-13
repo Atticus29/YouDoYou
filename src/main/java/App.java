@@ -62,10 +62,14 @@ public class App {
       int importance = Integer.parseInt(request.queryParams("importance"));
       int taskListId = Integer.parseInt(request.queryParams("taskListId"));
       int skillId = Integer.parseInt(request.queryParams("skillId"));
-      Task newTask = new Task(name, dueDate, 1, priority, importance, estimatedTime, difficulty); // TODO: change that 1 to user.all().get(0)
+      Task newTask = new Task(name, dueDate, dummy.getUserId(), priority, importance, estimatedTime, difficulty); // TODO: change that dummy to user.all().get(0)
       newTask.save();
-      newTask.associateTaskWithSkill(skillId);
-      newTask.associateTaskWithTaskList(taskListId);
+      try{
+        newTask.associateTaskWithSkill(skillId);
+      }catch(RuntimeException e){}
+      try{
+        newTask.associateTaskWithTaskList(taskListId);
+      }catch(RuntimeException e){}
       response.redirect(request.headers("Referer"));
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
@@ -104,7 +108,9 @@ public class App {
       newTaskList.save();
       newTaskList.associateTaskListWithSkill(skillId);
       Task.find(assignedTaskId).associateTaskWithTaskList(newTaskList.getId());
-      response.redirect(request.headers("Referer"));
+      // response.redirect(request.headers("Referer"));
+      String url = "/tasklists";
+      response.redirect(url);
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 
@@ -141,6 +147,23 @@ public class App {
       model.put("tasklists", TaskList.all());
       model.put("skills", Skill.getAllSkills());
       model.put("template", "templates/player.vtl");
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    post("/tasks/:taskId/complete", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      model.put("user", dummy);
+      int currentTaskId = Integer.parseInt(request.params(":taskId"));
+      Task currentTask = Task.find(currentTaskId);
+      currentTask.markCompleted();
+      response.redirect(request.headers("Referer"));
+      // String url = "/tasks";
+      // response.redirect(url);
+      // model.put("user", dummy);
+      // model.put("tasks", Task.all());
+      // model.put("tasklists", TaskList.all());
+      // model.put("skills", Skill.getAllSkills());
+      // model.put("template", "templates/tasks.vtl");
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 

@@ -1,6 +1,8 @@
+<!-- <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css'> -->
 <link rel="stylesheet" href="/css/table.css">
 <script type="text/javascript" src="/js/table.js"></script>
 <script type="text/javascript" src="/js/date.js"></script>
+<!-- <link rel="stylesheet" href="/css/checkbox.css"> -->
 <link rel="stylesheet" href="/css/app.css">
 
 
@@ -21,6 +23,8 @@
           <th>Task list</th>
           <th>Skill</th>
           <th>Experience</th>
+          <th>Completed?</th>
+          <th>Remove</th>
         </tr>
       </thead>
     </table>
@@ -39,7 +43,16 @@
           <td>$task.getImportance()</td>
           <td>$task.getAssociatedTaskListName()</td>
           <td>$task.getAssociatedSkillName()</td>
-          <td>Some experience</td> <!-- TODO: add experience value for task here -->
+          <td>Some Experience</td> <!-- TODO: add experience value for task here -->
+          <td>
+            #if($task.getCompleted() == false)
+              <form action="/tasks/$task.getId()/complete" method="post">
+                <button type="submit" name="button" class="btn btn-success">Complete</button>
+              </form>
+            #else
+              Already completed!
+            #end
+          </td>
         </tr>
         #end
         <form action="/tasks/new" method="post">
@@ -67,6 +80,7 @@
                 #end
               </select>
             </td>
+            <td></td>
             <td><button type="submit" class="btn btn-success">Add task</button></td>
           </tr>
         </form>

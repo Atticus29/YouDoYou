@@ -79,7 +79,8 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
     int pointsToAdd = (int)(10 * Task.POINT_RANGE[this.importance-1]* Task.POINT_RANGE[this.difficulty-1]* calculateEstimatedTimeMultiplier(this.estimated_time));
 
     User currentUser = User.findUser(this.user_id);
-    int oldExp = User.findUser(currentUser.getUserId()).getUserExperience();
+    int oldExp = currentUser.getUserExperience();
+    // int oldExp = User.findUser(currentUser.getUserId()).getUserExperience();
     currentUser.updateUserExperience(oldExp + pointsToAdd);
 
     if(this.task_list_id != 0){
