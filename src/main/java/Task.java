@@ -98,13 +98,6 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
     return this.task_list_id;
   }
 
-  // public String getAssociatedTaskListName() {
-  //   if (this.getTask_list_id()) {
-  //     return TaskList.find(getTask_list_id()).getName();
-  //   } else {
-  //     return "";
-  //   }
-  // }
 
   public String getAssociatedTaskListName() {
     try {
