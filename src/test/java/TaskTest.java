@@ -62,7 +62,6 @@ public class TaskTest {
     testTaskList.save();
     assertEquals(0, testTaskList.getNumber_tasks());
     int testTaskListId = testTaskList.getId();
-    // System.out.println("number of tasks before is: ");
     testTask.associateTaskWithTaskList(testTaskListId);
     TaskList currentTaskList = TaskList.find(testTaskListId);
     assertEquals(1, currentTaskList.getNumber_tasks());

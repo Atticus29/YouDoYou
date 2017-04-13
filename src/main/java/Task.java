@@ -29,24 +29,31 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
 
   public void associateTaskWithSkill(int skill_id){
     this.skill_id = skill_id;
+    this.updateSilently();
   }
 
   // Note: will also add 1 to associatedTaskList's number_tasks
   public void associateTaskWithTaskList(int task_list_id){
     this.task_list_id = task_list_id;
+    this.updateSilently();
     TaskList currentTaskList = TaskList.find(task_list_id);
     currentTaskList.setNumber_tasks(currentTaskList.getNumber_tasks() + 1);
-    currentTaskList.update(currentTaskList.getName(), currentTaskList.getDue(), currentTaskList.getSkill_id(), currentTaskList.getPriority_level(), currentTaskList.getCompleted(), currentTaskList.getNumber_tasks());
+    if(!this.getCompleted()){
+      System.out.println("task " + this.name + " is not complete");
+      currentTaskList.markIncomplete();
+    }
+    currentTaskList.updateSilently();
+    // (currentTaskList.getName(), currentTaskList.getDue(), currentTaskList.getSkill_id(), currentTaskList.getPriority_level(), currentTaskList.getCompleted(), currentTaskList.getNumber_tasks());
 
   }
 
   public void markCompleted(){
     // Update property
     this.completed = true;
+    this.update(this.name, this.due, this.skill_id, this.priority_level, this.task_list_id, this.importance, this.completed, this.estimated_time, this.difficulty);
 
     int pointsToAdd = (int)(10 * Task.POINT_RANGE[this.importance-1]* Task.POINT_RANGE[this.difficulty-1]* calculateEstimatedTimeMultiplier(this.estimated_time));
 
-    //TODO update experience to user
     User currentUser = User.findUser(this.user_id);
     System.out.println("should be true: " + (currentUser instanceof User));
     int oldExp = User.findUser(currentUser.getUserId()).getUserExperience();
@@ -161,6 +168,10 @@ public class Task extends TodoAbstract{ //implements DatabaseManagement {
       .addParameter("difficulty", difficulty)
       .executeUpdate();
     }
+  }
+
+  public void updateSilently(){
+    this.update(this.name, this.due, this.skill_id, this.priority_level, this.task_list_id, this.importance, this.completed, this.estimated_time, this.difficulty);
   }
 
 }

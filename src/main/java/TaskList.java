@@ -39,6 +39,11 @@ public class TaskList extends TodoAbstract {
     return returnVal;
   }
 
+  public void markIncomplete(){
+    this.completed = false;
+    this.updateSilently();
+  }
+
   public void markCompleted(){
     if (this.getTasks().size() > 0 && this.allTasksDone()){
       this.completed = true;
@@ -55,7 +60,10 @@ public class TaskList extends TodoAbstract {
         currentUser.updateUserExperience(oldExp + bonusPoints);
         this.bonusPointsAdded = true;
       }
-      this.update(this.name, this.due, this.skill_id, this.priority_level, this.completed, this.number_tasks);
+      TaskList updatedTL = find(this.getId());
+      updatedTL.updateSilently();
+      // updatedTL. update(updatedTL.getName(), updatedTL.getDue(), updatedTL.getSkill_id(), updatedTL.getPriority_level(), updatedTL.getCompleted(), updatedTL.getNumber_tasks());
+      // this.update(this.name, this.due, this.skill_id, this.priority_level, this.completed, this.number_tasks);
     }
 
   }
@@ -147,6 +155,10 @@ public class TaskList extends TodoAbstract {
       .executeAndFetch(Task.class);
       return results;
     }
+  }
+
+  public void updateSilently(){
+    this.update(this.name, this.due, this.skill_id, this.priority_level, this.completed, this.number_tasks);
   }
 
 
