@@ -1,3 +1,5 @@
+<!-- begin tasklists.vtl -->
+
 <link rel="stylesheet" href="/css/table.css">
 <script type="text/javascript" src="/js/table.js">
 
@@ -9,10 +11,10 @@
     <table cellpadding="0" cellspacing="0" border="0">
       <thead>
         <tr>
-          <th>Task</th>
+          <th>Task List</th>
           <th>Created</th>
           <th>Due</th>
-          <th>Task list</th>
+          <th>Number of tasks</th>
           <th>Experience</th>
         </tr>
       </thead>
@@ -21,12 +23,12 @@
   <div class="tbl-content">
     <table cellpadding="0" cellspacing="0" border="0">
       <tbody>
-        #foreach ($task in $tasks)
+        #foreach ($tasklist in $tasklists)
         <tr>
-          <td><a href="/tasks/$task.getId()">$task.getName()</a></td>
-          <td>$task.getReadableCreated()</td>
-          <td>$task.getReadableDue()</td>
-          <td>$task.getAssociatedTaskListName()</td>
+          <td><a href="/tasklists/$tasklist.getId()">$tasklist.getName()</a></td>
+          <td>$tasklist.getReadableCreated()</td>
+          <td>$tasklist.getReadableDue()</td>
+          <td>$tasklist.getNumber_tasks()</td>
           <td>Some experience</td>
         </tr>
         #end
@@ -34,3 +36,6 @@
     </table>
   </div>
 </section>
+
+
+<!-- end tasklists.vtl -->

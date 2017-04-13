@@ -14,12 +14,15 @@ public class Skill {
   private int level;
   private int experience;
   private Timestamp created;
-
+  // private int numTasksWithSkillCompleted;
+  // TODO: implement numTasksWithSkillCompleted getter/save/etc
+  // TODO: implement getAllTasks for skill
   public Skill(String name, int userId) {
     this.name = name;
     this.userId = userId;
     this.level = 0;
     this.experience = 0;
+    // this.numTasksWithSkillCompleted = 0;
   }
 
   public String getSkillName() {
@@ -64,6 +67,18 @@ public class Skill {
   }
 
   //DB stuff below
+
+  // TODO: add a getAllTasks
+  public static List<Skill> getAllSkills() {
+    try(Connection con = DB.sql2o.open()) {
+      String sql = "SELECT * FROM skills";
+      List<Skill> skills = con.createQuery(sql)
+      .addColumnMapping("user_id", "userId")
+      .throwOnMappingFailure(false)
+      .executeAndFetch(Skill.class);
+      return skills;
+    }
+  }
 
   public void updateSkillName(String newSkillName) {
    try(Connection con = DB.sql2o.open()) {

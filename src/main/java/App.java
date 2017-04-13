@@ -14,12 +14,69 @@ public class App {
     get("/", (request, response) -> {
       Map<String, Object> model = new HashMap<String, Object>();
       model.put("template", "templates/index.vtl");
+      model.put("tasks", Task.all());
+      model.put("tasklists", TaskList.all());
+      model.put("skills", Skill.getAllSkills());
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 
     get("/tasks", (request, response) -> {
       Map<String, Object> model = new HashMap<String, Object>();
       model.put("template", "templates/tasks.vtl");
+      model.put("tasks", Task.all());
+      model.put("tasklists", TaskList.all());
+      model.put("skills", Skill.getAllSkills());
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    get("/tasks/:id", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      Task task = Task.find(Integer.parseInt(request.params("id")));
+      model.put("task", task);
+      model.put("template", "templates/task.vtl");
+      model.put("tasks", Task.all());
+      model.put("tasklists", TaskList.all());
+      model.put("skills", Skill.getAllSkills());
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    get("/tasklists", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      model.put("template", "templates/tasklists.vtl");
+      model.put("tasks", Task.all());
+      model.put("tasklists", TaskList.all());
+      model.put("skills", Skill.getAllSkills());
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    get("/tasklists/:id", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      TaskList tasklist = TaskList.find(Integer.parseInt(request.params("id")));
+      model.put("tasklist", tasklist);
+      model.put("template", "templates/task.vtl");
+      model.put("tasks", Task.all());
+      model.put("tasklists", TaskList.all());
+      model.put("skills", Skill.getAllSkills());
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    get("/skills", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      model.put("template", "templates/skills.vtl");
+      model.put("tasks", Task.all());
+      model.put("tasklists", TaskList.all());
+      model.put("skills", Skill.getAllSkills());
+      return new ModelAndView(model, layout);
+    }, new VelocityTemplateEngine());
+
+    get("/skills/:id", (request, response) -> {
+      Map<String, Object> model = new HashMap<String, Object>();
+      Skill skill = Skill.find(Integer.parseInt(request.params("id")));
+      model.put("tasklist", tasklist);
+      model.put("template", "templates/skill.vtl");
+      model.put("tasks", Task.all());
+      model.put("tasklists", TaskList.all());
+      model.put("skills", Skill.getAllSkills());
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
 

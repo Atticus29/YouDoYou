@@ -7,6 +7,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.text.DateFormat;
 
 public abstract class TodoAbstract {
   public String name;
@@ -28,6 +29,16 @@ public abstract class TodoAbstract {
 
   public Timestamp getCreated(){
     return this.created;
+  }
+
+  public String getReadableCreated() {
+    DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+    String text = df.format(this.getCreated());
+  }
+
+  public String getReadableDue() {
+    DateFormat df = new SimpleDateFormat("dd-MM-yyyy");
+    String text = df.format(this.getDue());
   }
 
   public Timestamp getDue(){

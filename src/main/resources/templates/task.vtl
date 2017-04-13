@@ -1,0 +1,22 @@
+<!-- begin task.vtl -->
+<div class="col-md-2">
+  <!-- alignment -->
+</div>
+
+<div class="center col-md-6">
+<h2>$task.getName()</h2>
+<br>
+<h4>Created on: $task.getReadableCreated()</h4>
+<br>
+<h4>Due: $task.getReadableDue()</h4>
+<br>
+<h4>Task list: <a href="/tasklists/$task.getTask_list_id()">$task.getAssociatedTaskListName()</a></h4>
+<br>
+<h4>Task skill: <a href="/skills/$task.getSkill_id()"></a>$task.getAssociatedSkillName()</h4>
+
+</div>
+
+<div class="col-md-2">
+  <!-- alignment -->
+</div>
+<!-- end task.vtl -->

@@ -25,52 +25,51 @@ public class UserTest {
     testUser2.saveUserToDatabase();
   }
 
- @Test
- public void user_instantiatesCorrectly_true() {
-   Timestamp rightNow = new Timestamp(new Date().getTime());
-   assertTrue(testUser.getUserName().equals("Jemina"));
-   assertTrue(testUser.getUserLevel() == 0);
-   assertTrue(testUser.getUserExperience() == 0);
-   assertTrue(testUser.getUserId() > 0);
-   assertEquals(rightNow.getDay(), User.findUser(testUser.getUserId()).getUserCreated().getDay());
- }
+  @Test
+  public void user_instantiatesCorrectly_true() {
+    Timestamp rightNow = new Timestamp(new Date().getTime());
+    assertTrue(testUser.getUserName().equals("Jemina"));
+    assertTrue(testUser.getUserLevel() == 0);
+    assertTrue(testUser.getUserExperience() == 0);
+    assertTrue(testUser.getUserId() > 0);
+    assertEquals(rightNow.getDay(), User.findUser(testUser.getUserId()).getUserCreated().getDay());
+  }
 
- @Test
- public void find_findsProperUser_true() {
-   assertEquals(testUser, User.findUser(testUser.getUserId()));
- }
+  @Test
+  public void find_findsProperUser_true() {
+    assertEquals(testUser, User.findUser(testUser.getUserId()));
+  }
 
- @Test
- public void update_updatesCorrectly_true() {
-   testUser.updateUserName("Jerry");
-   assertEquals("Jerry", User.findUser(testUser.getUserId()).getUserName());
-   testUser.updateUserLevel(1);
-   assertEquals(1, User.findUser(testUser.getUserId()).getUserLevel());
-   testUser.updateUserExperience(1);
-   assertEquals(1, User.findUser(testUser.getUserId()).getUserExperience());
-   testUser.updateUserExperience(299);
-   assertEquals(2, User.findUser(testUser.getUserId()).getUserLevel());
- }
+  @Test
+  public void update_updatesCorrectly_true() {
+    testUser.updateUserName("Jerry");
+    assertEquals("Jerry", User.findUser(testUser.getUserId()).getUserName());
+    testUser.updateUserLevel(1);
+    assertEquals(1, User.findUser(testUser.getUserId()).getUserLevel());
+    testUser.updateUserExperience(1);
+    assertEquals(1, User.findUser(testUser.getUserId()).getUserExperience());
+    testUser.updateUserExperience(299);
+    assertEquals(2, User.findUser(testUser.getUserId()).getUserLevel());
+  }
 
- @Test
- public void checkIfLevelUp_calculatesCorrectly_true() {
-   testUser.updateUserExperience(5500);
-   assertEquals(10, User.findUser(testUser.getUserId()).checkIfLevelUp());
- }
+  @Test
+  public void checkIfLevelUp_calculatesCorrectly_true() {
+    testUser.updateUserExperience(5500);
+    assertEquals(10, User.findUser(testUser.getUserId()).checkIfLevelUp());
+  }
 
- @Test
- public void find_findsAllUserSkills_true() {
-   Skill testSkill = new Skill("Jumping", testUser.getUserId());
-   testSkill.saveSkillToDatabase();
-   assertEquals(testSkill, User.findUser(testUser.getUserId()).findAllUserSkills().get(0));
- }
+  @Test
+  public void find_findsAllUserSkills_true() {
+    Skill testSkill = new Skill("Jumping", testUser.getUserId());
+    testSkill.saveSkillToDatabase();
+    assertEquals(testSkill, User.findUser(testUser.getUserId()).findAllUserSkills().get(0));
+  }
 
- @Test
- public void updateUserExperience_LevelsUpUserIfTheyGainALotOfExperience_true(){
-   int currentExp = testUser.getUserExperience();
-   testUser.updateUserExperience(currentExp + 1000);
-   assertEquals(4, User.findUser(testUser.getUserId()).getUserLevel());
- }
-
+  @Test
+  public void updateUserExperience_LevelsUpUserIfTheyGainALotOfExperience_true(){
+    int currentExp = testUser.getUserExperience();
+    testUser.updateUserExperience(currentExp + 1000);
+    assertEquals(4, User.findUser(testUser.getUserId()).getUserLevel());
+  }
 
 }

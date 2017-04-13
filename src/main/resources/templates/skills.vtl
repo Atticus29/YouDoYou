@@ -1,3 +1,5 @@
+<!-- begin skills.vtl -->
+
 <link rel="stylesheet" href="/css/table.css">
 <script type="text/javascript" src="/js/table.js">
 
@@ -9,11 +11,11 @@
     <table cellpadding="0" cellspacing="0" border="0">
       <thead>
         <tr>
-          <th>Task</th>
+          <th>Skill</th>
           <th>Created</th>
-          <th>Due</th>
-          <th>Task list</th>
+          <th>Level</th>
           <th>Experience</th>
+          <th>Number of tasks completed</th>
         </tr>
       </thead>
     </table>
@@ -21,16 +23,19 @@
   <div class="tbl-content">
     <table cellpadding="0" cellspacing="0" border="0">
       <tbody>
-        #foreach ($task in $tasks)
+        #foreach ($skill in $skills)
         <tr>
-          <td><a href="/tasks/$task.getId()">$task.getName()</a></td>
-          <td>$task.getReadableCreated()</td>
-          <td>$task.getReadableDue()</td>
-          <td>$task.getAssociatedTaskListName()</td>
-          <td>Some experience</td>
+          <td><a href="/skills/$skill.getId()">$skill.getSkillName()</a></td>
+          <td>$skill.getSkillCreated()</td>
+          <td>$skill.getSkillLevel()</td>
+          <td>$skill.getSkillExperience()</td>
+          <td>Some number</td>
         </tr>
         #end
       </tbody>
     </table>
   </div>
 </section>
+
+
+<!-- end skills.vtl -->
