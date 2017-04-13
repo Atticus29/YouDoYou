@@ -64,8 +64,8 @@ public class App {
       int skillId = Integer.parseInt(request.queryParams("skillId"));
       Task newTask = new Task(name, dueDate, 1, priority, importance, estimatedTime, difficulty); // TODO: change that 1 to user.all().get(0)
       newTask.save();
-      newTask.associateTaskWithSkill(skillId);
-      newTask.associateTaskWithTaskList(taskListId);
+      if (skillId != 0) {newTask.associateTaskWithSkill(skillId);}
+      if (taskListId != 0) {newTask.associateTaskWithTaskList(taskListId);}
       response.redirect(request.headers("Referer"));
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
@@ -167,7 +167,7 @@ public class App {
     get("/duetoday", (request, response) -> {
       Map<String, Object> model = new HashMap<String, Object>();
       model.put("tasks", Task.allTasksDueToday());
-      model.put("tasklists", Task.allTaskListsDueToday());
+      model.put("tasklists", TaskList.allTaskListsDueToday());
       model.put("template", "templates/duetoday.vtl");
       return new ModelAndView(model, layout);
     }, new VelocityTemplateEngine());
